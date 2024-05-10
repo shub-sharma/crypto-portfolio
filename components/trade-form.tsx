@@ -11,6 +11,23 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandList,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -22,7 +39,14 @@ import { format } from "date-fns";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon } from "lucide-react";
+import {
+  CalendarIcon,
+  Check,
+  ChevronsUpDown,
+  Pencil,
+  Send,
+  Wand2,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface TradeInfoProps {
@@ -35,9 +59,10 @@ interface TradeInfoProps {
 }
 
 const formSchema = z.object({
-  userId: z.string().min(1, {
-    message: "Userid is required.",
-  }),
+  // TODO: Must be populated by calling component during api calls, not here...
+  // userId: z.string().min(1, {
+  //   message: "Userid is required.",
+  // }),
   ticker: z.string().min(1, {
     message: "Ticker is required.",
   }),
@@ -45,13 +70,13 @@ const formSchema = z.object({
     message: "Transaction type is required.",
   }),
   date: z.date({
-    required_error: "A date of birth is required.",
+    required_error: "Transaction date is required.",
   }),
-  amount: z.number().int().positive({
-    message: "Cryptocurrency amount must be a positive integer.",
+  amount: z.coerce.number().positive({
+    message: "Cryptocurrency amount must be a positive decimal number.",
   }),
-  price: z.number().int().positive({
-    message: "Price (in USD) must be a positive integer.",
+  price: z.coerce.number().positive({
+    message: "Price (in USD) must be a positive decimal number.",
   }),
 });
 
@@ -65,7 +90,7 @@ export const TradeForm = ({
 }: {
   tickersList: any;
   tradeType: string;
-  tradeInfo: TradeInfoProps;
+  tradeInfo: TradeInfoProps | undefined;
   setTradeInfo: any;
   submitting: boolean;
   handleSubmit: any;
@@ -73,7 +98,6 @@ export const TradeForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: tradeInfo || {
-      userId: "",
       ticker: "",
       type: "",
       date: undefined,
@@ -84,7 +108,11 @@ export const TradeForm = ({
 
   const isLoading = form.formState.isSubmitting;
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  // const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  //   console.log(values);
+  // };
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
     console.log(values);
   };
 
@@ -105,15 +133,69 @@ export const TradeForm = ({
             <Separator className="bg-primary/10" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* TODO: ~Add a combobox displaying the list of tickers~
+            Add a $ placeholder for inputs 
+            - Fix up placeholder issues textboxes. 
+            - Add a `tradeNote` field indicating some note related to the trade.
+            - Do input validation and push the data to the mongodb server */}
+
             <FormField
-              name="ticker"
               control={form.control}
+              name="ticker"
               render={({ field }) => (
                 <FormItem className="col-span-2 md:col-span-1">
                   <FormLabel>Ticker</FormLabel>
-                  <FormControl>
-                    <Input disabled={isLoading} placeholder="BTC" {...field} />
-                  </FormControl>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          disabled={isLoading}
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? tickersList.find(
+                                (ticker) => ticker.value === field.value
+                              )?.label
+                            : "Select ticker"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[--radix-popover-trigger-width] max-h-[--radix-popover-content-available-height]">
+                      <Command>
+                        <CommandInput placeholder="Search tickers..." />
+                        <CommandEmpty>No tickers available</CommandEmpty>
+                        <CommandGroup>
+                          <CommandList>
+                            {tickersList.map((ticker) => (
+                              <CommandItem
+                                value={ticker.label}
+                                key={ticker.value}
+                                onSelect={() => {
+                                  form.setValue("ticker", ticker.value);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    ticker.value === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {ticker.label}
+                              </CommandItem>
+                            ))}
+                          </CommandList>
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   <FormDescription>
                     Ticker of your cryptocurrency
                   </FormDescription>
@@ -129,7 +211,7 @@ export const TradeForm = ({
                 <FormItem className="col-span-2 md:col-span-1">
                   <FormLabel>Amount</FormLabel>
                   <FormControl>
-                    <Input disabled={isLoading} placeholder="1" {...field} />
+                    <Input disabled={isLoading} type="number" {...field} />
                   </FormControl>
                   <FormDescription>Amount in cryptocurrency</FormDescription>
                   <FormMessage />
@@ -144,7 +226,7 @@ export const TradeForm = ({
                 <FormItem className="col-span-2 md:col-span-1">
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input disabled={isLoading} placeholder="BTC" {...field} />
+                    <Input disabled={isLoading} type="number" {...field} />
                   </FormControl>
                   <FormDescription>
                     Price of cryptocurrency (USD)
@@ -197,6 +279,52 @@ export const TradeForm = ({
                 </FormItem>
               )}
             />
+
+            <FormField
+              name="type"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem className="col-span-2 md:col-span-2">
+                  <FormLabel>Type</FormLabel>
+                  <Select
+                    disabled={isLoading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a transaction type"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="Buy">Buy</SelectItem>
+                      <SelectItem value="Sell">Sell</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Select a transaction type</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="w-full flex justify-center">
+            <Button type="submit" size="lg" disabled={isLoading}>
+              {tradeInfo ? (
+                <>
+                  Edit Trade
+                  <Pencil className="w-4 h-4 ml-2" />
+                </>
+              ) : (
+                <>
+                  Add Trade
+                  <Send className="w-4 h-4 ml-2" />
+                </>
+              )}
+            </Button>
           </div>
         </form>
       </Form>

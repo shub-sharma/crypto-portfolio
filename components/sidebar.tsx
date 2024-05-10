@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Home, Plus, User, Rows3, ScrollText } from "lucide-react";
+import { Home, Plus, User, ScrollText, BarChart } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 export const Sidebar = () => {
@@ -28,7 +28,7 @@ export const Sidebar = () => {
     },
     ,
     {
-      icon: Rows3,
+      icon: BarChart,
       href: "/users/ranking",
       label: "Ranking",
       pro: false,
