@@ -48,6 +48,8 @@ import {
   Wand2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 interface TradeInfoProps {
   userId: string;
@@ -95,6 +97,9 @@ export const TradeForm = ({
   submitting: boolean;
   handleSubmit: any;
 }) => {
+  const router = useRouter();
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: tradeInfo || {
@@ -108,11 +113,36 @@ export const TradeForm = ({
 
   const isLoading = form.formState.isSubmitting;
 
-  // const onSubmit = async (values: z.infer<typeof formSchema>) => {
-  //   console.log(values);
-  // };
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      let response: any;
+      if (tradeInfo) {
+        // call patch to edit trade
+      } else {
+        response = await fetch("/api/trade", {
+          method: "POST",
+          body: JSON.stringify(values),
+        });
+      }
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+      if (response.ok) {
+        router.push("/");
+
+        toast({
+          description: "Success",
+        });
+      }
+      // Create trade
+
+      // Refresh all server components to load up the new trade
+      router.refresh();
+      // router.push("/");
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description: "Something went wrong",
+      });
+    }
     console.log(values);
   };
 
