@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-
+import Trade from "@/models/trade";
+import User from "@/models/user";
 let isConnected = false;
 
 export const connectToDB = async () => {
@@ -13,8 +14,6 @@ export const connectToDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
       dbName: process.env.MONGODB_DB,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
     });
     isConnected = true;
 

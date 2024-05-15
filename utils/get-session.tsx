@@ -1,5 +1,8 @@
 import { connectToDB } from "@/utils/database";
 import User from "@/models/user";
+
+import Trade from "@/models/user";
+
 import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
@@ -16,8 +19,6 @@ export const signInAndGetSession = async () => {
     // check if user already exists
     const userExists = await User.findOne({ userId: user.id });
 
-    console.log("User exists", userExists);
-
     // if not, create a new document and save user in MongoDB
     if (!userExists) {
       const newUser = await User.create({
@@ -27,6 +28,7 @@ export const signInAndGetSession = async () => {
       console.log("new user", newUser);
       return newUser._id.toString();
     }
+    console.log("User exists", userExists);
 
     return userExists._id.toString();
   } catch (error: any) {

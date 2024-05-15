@@ -51,19 +51,28 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
-interface TradeInfoProps {
-  userId: string;
+interface TradeInfo {
   ticker: string;
+  tradeId: string;
   type: string;
   date: Date;
   amount: number;
   price: number;
 }
 
+interface TradeFormProps {
+  tickersList: any;
+  tradeType: string;
+  initialTradeInfoData: TradeInfo | null | {};
+  setTradeInfo: any;
+  submitting: boolean;
+  handleSubmit: any;
+}
+
 const formSchema = z.object({
   // TODO: Must be populated by calling component during api calls, not here...
-  // userId: z.string().min(1, {
-  //   message: "Userid is required.",
+  // tradeId: z.string().min(1, {
+  //   message: "trade id is required.",
   // }),
   ticker: z.string().min(1, {
     message: "Ticker is required.",
@@ -85,24 +94,19 @@ const formSchema = z.object({
 export const TradeForm = ({
   tickersList,
   tradeType,
-  tradeInfo,
+  initialTradeInfoData,
   setTradeInfo,
   submitting,
   handleSubmit,
-}: {
-  tickersList: any;
-  tradeType: string;
-  tradeInfo: TradeInfoProps | undefined;
-  setTradeInfo: any;
-  submitting: boolean;
-  handleSubmit: any;
-}) => {
+}: TradeFormProps) => {
   const router = useRouter();
   const { toast } = useToast();
 
+  console.log("initialTradeInfoData :", initialTradeInfoData);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: tradeInfo || {
+    defaultValues: initialTradeInfoData || {
       ticker: "",
       type: "",
       date: undefined,
@@ -115,9 +119,14 @@ export const TradeForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      console.log("Submitting ", values);
       let response: any;
-      if (tradeInfo) {
+      if (initialTradeInfoData) {
         // call patch to edit trade
+        response = await fetch(`/api/trade/${initialTradeInfoData.tradeId}`, {
+          method: "PATCH",
+          body: JSON.stringify(values),
+        });
       } else {
         response = await fetch("/api/trade", {
           method: "POST",
@@ -136,7 +145,7 @@ export const TradeForm = ({
 
       // Refresh all server components to load up the new trade
       router.refresh();
-      // router.push("/");
+      router.push("/");
     } catch (error) {
       toast({
         variant: "destructive",
@@ -202,10 +211,10 @@ export const TradeForm = ({
                         <CommandEmpty>No tickers available</CommandEmpty>
                         <CommandGroup>
                           <CommandList>
-                            {tickersList.map((ticker) => (
+                            {tickersList.map((ticker, i) => (
                               <CommandItem
-                                value={ticker.label}
-                                key={ticker.value}
+                                value={ticker.value}
+                                key={i}
                                 onSelect={() => {
                                   form.setValue("ticker", ticker.value);
                                 }}
@@ -343,7 +352,7 @@ export const TradeForm = ({
           </div>
           <div className="w-full flex justify-center">
             <Button type="submit" size="lg" disabled={isLoading}>
-              {tradeInfo ? (
+              {tradeType === "Edit" ? (
                 <>
                   Edit Trade
                   <Pencil className="w-4 h-4 ml-2" />
