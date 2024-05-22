@@ -2,6 +2,7 @@ import Trade from "@/models/trade";
 import { signInAndGetSession } from "@/utils/get-session";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import User from "@/models/user";
 
 export async function POST(req: Request) {
   try {
@@ -32,6 +33,25 @@ export async function POST(req: Request) {
   } catch (error) {
     console.log("[TRADE POST]", error);
     return new NextResponse("Internal server while creating trade", {
+      status: 500,
+    });
+  }
+}
+
+export async function GET() {
+  try {
+    const dbUserId = await signInAndGetSession();
+
+    const trades = await Trade.find({ holder: dbUserId }).populate({
+      path: "holder",
+      model: User,
+    });
+    console.log(trades);
+
+    return new NextResponse(JSON.stringify(trades), { status: 200 });
+  } catch (error) {
+    console.log("[TRADE GET]", error);
+    return new NextResponse("Internal server while retrieving trades", {
       status: 500,
     });
   }

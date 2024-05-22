@@ -45,7 +45,6 @@ import {
   ChevronsUpDown,
   Pencil,
   Send,
-  Wand2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
@@ -64,9 +63,6 @@ interface TradeFormProps {
   tickersList: any;
   tradeType: string;
   initialTradeInfoData: TradeInfo | null | {};
-  setTradeInfo: any;
-  submitting: boolean;
-  handleSubmit: any;
 }
 
 const formSchema = z.object({
@@ -95,9 +91,6 @@ export const TradeForm = ({
   tickersList,
   tradeType,
   initialTradeInfoData,
-  setTradeInfo,
-  submitting,
-  handleSubmit,
 }: TradeFormProps) => {
   const router = useRouter();
   const { toast } = useToast();
@@ -156,7 +149,7 @@ export const TradeForm = ({
   };
 
   return (
-    <div className="h-full p-4 space-y-2 max-w-3xl mx-auto">
+    <div className="h-full p-4 space-y-2 max-w-7xl mx-auto">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

@@ -58,7 +58,6 @@ export async function GET(
   try {
     await connectToDB();
 
-    // TODO: useful for populating user schema if it can't be found by mongoose.
     const trade = await Trade.findById(params.tradeId).populate({
       path: "holder",
       model: User,
@@ -71,9 +70,8 @@ export async function GET(
     return new NextResponse(JSON.stringify(trade), { status: 201 });
   } catch (error) {
     console.log("[TRADE GET]", error);
-    return new NextResponse(
-      "Internal server while updating trade information",
-      { status: 500 }
-    );
+    return new NextResponse("Internal server while retrieving trades", {
+      status: 500,
+    });
   }
 }

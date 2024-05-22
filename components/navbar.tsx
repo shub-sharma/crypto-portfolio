@@ -34,8 +34,8 @@ export const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-x-3">
-        <Button size="sm" variant="premium">
-          Upgrade
+        <Button size="sm" variant="premium" href="/add-trade">
+          GitHub
           <Sparkles className="h-4 w-4 fill-white text-white ml-2" />
         </Button>
         <ModeToggle />

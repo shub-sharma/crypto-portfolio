@@ -7,7 +7,8 @@ import { MouseEvent } from "react";
 import { Separator } from "@/components/ui/separator";
 
 import { TradeForm } from "@/components/trade-form";
-import { json } from "stream/consumers";
+
+import { Header } from "@/components/header";
 
 interface TradeIdPageProps {
   params: {
@@ -16,52 +17,14 @@ interface TradeIdPageProps {
 }
 
 const TradeIdPage = ({ params }: TradeIdPageProps) => {
-  const router = useRouter();
-  // const { userId } = getAuth();
-  const userId = "test";
-  const [submitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  const tradeInfoDefault = {
-    userId: userId || "",
-    ticker: "",
-    type: "",
-    date: new Date(),
-    amount: 0,
-    price: 0,
-  };
-
-  // console.log("default", tradeInfoDefault);
   const [tradeInfo, setTradeInfo] = useState({});
-  const [testTradeInfo, setTestTradeInfo] = useState({});
-
   const [errorMessage, setErrorMessage] = useState("");
 
   const [tickersList, setTickersList] = useState([]);
   const [tradeType, setTradeType] = useState("Add");
 
   const tradeIdParam = params.tradeId;
-  const addTrade = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch("/api/trade/add", {
-        method: "POST",
-        body: JSON.stringify(tradeInfo),
-      });
-
-      if (response.ok) {
-        router.push("/");
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // const tickerList = ["btc", "eth", "sol"];
 
   useEffect(() => {
     console.log("test");
@@ -99,14 +62,6 @@ const TradeIdPage = ({ params }: TradeIdPageProps) => {
             date: new Date(data.date),
           });
 
-          setTestTradeInfo({
-            tradeId: data._id,
-            type: data.type,
-            amount: data.amount,
-            price: data.price,
-            // date: new Date(data.date),
-          });
-
           console.log("got trade info", data);
         };
         if (tradeIdParam && tradeIdParam !== "new") {
@@ -122,47 +77,26 @@ const TradeIdPage = ({ params }: TradeIdPageProps) => {
     };
 
     fetchData();
-  }, [tradeIdParam]); // Empty dependency array to run effect only once
-
-  // TODO: Ticker used in the form object needs to be mapped back for edit form, currently form uses (Name (Ticker)), but we need ID.
+  }, [tradeIdParam]);
 
   return (
     <>
-      {loading === false && Object.keys(tradeInfo).length > 0 ? (
+      {loading === false &&
+      (Object.keys(tradeInfo).length > 0 || tradeIdParam === "new") ? (
         <TradeForm
           tickersList={tickersList}
           tradeType={tradeType}
           initialTradeInfoData={
             Object.keys(tradeInfo).length === 0 ? null : tradeInfo
           }
-          setTradeInfo={setTradeInfo}
-          submitting={submitting}
-          handleSubmit={addTrade}
         />
       ) : errorMessage.length > 0 ? (
-        <div className="h-full p-4 space-y-2 max-w-3xl mx-auto">
-          <div className="space-y-2 w-full col-span-2">
-            <div>
-              <h3 className="text-lg font-medium">
-                {tradeType} Trade Failed 😞
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Please verify the trade id exists. {errorMessage}
-              </p>
-            </div>
-            <Separator className="bg-primary/10" />
-          </div>
-        </div>
+        <Header
+          title="Trade Failed 😞"
+          message={`Please verify the trade id exists: ${errorMessage}`}
+        />
       ) : (
-        <div className="h-full p-4 space-y-2 max-w-3xl mx-auto">
-          <div className="space-y-2 w-full col-span-2">
-            <div>
-              <h3 className="text-lg font-medium">Loading...</h3>
-              <p className="text-sm text-muted-foreground">Please wait</p>
-            </div>
-            <Separator className="bg-primary/10" />
-          </div>
-        </div>
+        <Header title="Loading..." message="Please wait" />
       )}
     </>
   );
