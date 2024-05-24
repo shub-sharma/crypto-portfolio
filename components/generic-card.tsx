@@ -17,8 +17,8 @@ export const GenericCard = ({
 }: {
   title: string;
   content: string;
-  description: string;
-  description_percent_change: number;
+  description: string | undefined;
+  description_percent_change: number | undefined;
   icon: ReactNode;
 }) => {
   return (

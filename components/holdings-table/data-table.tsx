@@ -30,6 +30,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -40,6 +42,9 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter();
+  const { toast } = useToast();
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -60,6 +65,37 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
       columnVisibility,
+    },
+    meta: {
+      editTrade: (id: string) => {
+        router.push(`/trade/${id}`);
+      },
+      deleteTrades: (tickerId: string) => {
+        const hasConfirmed = confirm(
+          `Are you sure you want to delete ${tickerId}?`
+        );
+
+        if (hasConfirmed) {
+          try {
+            const response = fetch(`/api/trade/`, {
+              method: "DELETE",
+              body: JSON.stringify({ ticker: tickerId }),
+            });
+
+            if (response.ok) {
+              toast({
+                description: "Successfully deleted",
+              });
+            }
+            location.reload();
+          } catch (error) {
+            toast({
+              variant: "destructive",
+              description: "Something went wrong while deleting",
+            });
+          }
+        }
+      },
     },
   });
 
@@ -102,8 +138,7 @@ export function DataTable<TData, TValue>({
         </DropdownMenu>
       </div>
 
-      {/* TODO: Add bg-primary/10 to display hover effect */}
-      <div className="rounded-md border">
+      <div className="rounded-md border bg-card shadow-sm">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -109,6 +109,7 @@ export const getHoldingsTableData = (livePrices: any, holdings: any) => {
         net_profit:
           livePrices[key]["price_usd"] * holdings[key]["amount"] -
           holdings[key]["costBasis"],
+        amount_in_usd: livePrices[key]["price_usd"] * holdings[key]["amount"],
       };
 
       const percentChangeKeys = [

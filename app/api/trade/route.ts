@@ -56,3 +56,30 @@ export async function GET() {
     });
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const dbUserId = await signInAndGetSession();
+
+    const body = await req.json();
+    const { ticker } = body;
+    // Delete all trades for the given ticker name for the holder
+
+    const trades = await Trade.deleteMany({
+      holder: dbUserId,
+      ticker: ticker,
+    }).populate({
+      path: "holder",
+      model: User,
+    });
+
+    console.log(trades);
+
+    return new NextResponse(JSON.stringify(trades), { status: 200 });
+  } catch (error) {
+    console.log("[TRADE DELETE]", error);
+    return new NextResponse("Internal server while deleting trades", {
+      status: 500,
+    });
+  }
+}

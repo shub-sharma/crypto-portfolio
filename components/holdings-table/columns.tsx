@@ -14,13 +14,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Metadata = {
-  symbol: string;
-  image: string;
-  name: string;
-};
 
 export type Holding = {
   id: string;
@@ -134,9 +127,7 @@ export const columns: ColumnDef<Holding>[] = [
       );
     },
     cell: ({ row }) => {
-      const total =
-        parseFloat(row.getValue("price_usd")) *
-        parseFloat(row.getValue("amount"));
+      const total = parseFloat(row.getValue("amount_in_usd"));
       return (
         <div className="text-right font-small mr-4">
           {formatDollar(total, 2)}
@@ -267,7 +258,7 @@ export const columns: ColumnDef<Holding>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const holdingData = row.original;
 
       return (
@@ -281,7 +272,9 @@ export const columns: ColumnDef<Holding>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(holdingData.id)}
+              onClick={() =>
+                table.options?.meta?.editTrade(holdingData.tradeId)
+              }
             >
               <div className="w-full flex flex-wrap justify-between ">
                 <p>Edit </p>
@@ -289,7 +282,7 @@ export const columns: ColumnDef<Holding>[] = [
               </div>
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(holdingData.id)}
+              onClick={() => table.options?.meta?.deleteTrades(holdingData.id)}
             >
               <div className="w-full flex flex-wrap justify-between ">
                 <p>Delete </p>

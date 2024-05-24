@@ -97,12 +97,14 @@ const RootPage = () => {
               content={formatDollar(holdingsSummary["total_cost_basis"], 2)}
               icon={<DollarSign className="h-6 w-6 text-muted-foreground" />}
               description="All time"
+              description_percent_change={undefined}
             />
             <GenericCard
               title="Holdings"
               content={formatDollar(holdingsSummary["total_holdings_value"], 2)}
               icon={<Briefcase className="h-6 w-6 text-muted-foreground" />}
               description={`${Object.keys(holdings).length} assets`}
+              description_percent_change={undefined}
             />
             <GenericCard
               title="Net Profit"
@@ -111,6 +113,7 @@ const RootPage = () => {
               description_percent_change={
                 holdingsSummary["net_profit"]["percentage"]
               }
+              description={undefined}
             />
             <GenericCard
               title="1d Change"
@@ -122,6 +125,7 @@ const RootPage = () => {
               description_percent_change={
                 holdingsSummary["one_day_change_value"]["percentage"]
               }
+              description={undefined}
             />
           </div>
           <DataTable columns={columns} data={holdingsTableData} />
