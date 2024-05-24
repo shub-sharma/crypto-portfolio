@@ -12,11 +12,13 @@ export const GenericCard = ({
   title,
   content,
   description,
+  description_percent_change,
   icon,
 }: {
   title: string;
   content: string;
   description: string;
+  description_percent_change: number;
   icon: ReactNode;
 }) => {
   return (
@@ -27,7 +29,21 @@ export const GenericCard = ({
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{content}</div>
-        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+
+        {description_percent_change ? (
+          <p
+            className={
+              description_percent_change < 0
+                ? "mt-1 text-sm text-red-500"
+                : "mt-1 text-sm  text-green-500"
+            }
+          >
+            {description_percent_change}%
+          </p>
+        ) : (
+          <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+        )}
+        {/* <p className="mt-1 text-sm text-muted-foreground">{description}</p> */}
       </CardContent>
     </Card>
   );

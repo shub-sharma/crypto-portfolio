@@ -39,10 +39,12 @@ export const sumValues = (numArray: any) => {
   }, 0);
 };
 
-export const formatDollar = (number: number) => {
+export const formatDollar = (number: number, maxFractionDigit: number = 10) => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: maxFractionDigit,
   }).format(number);
 };
 
@@ -103,7 +105,10 @@ export const getHoldingsTableData = (livePrices: any, holdings: any) => {
       const coinData = {
         ...livePrices[key],
         ...holdings[key],
-        id: livePrices.id,
+        id: key,
+        net_profit:
+          livePrices[key]["price_usd"] * holdings[key]["amount"] -
+          holdings[key]["costBasis"],
       };
 
       const percentChangeKeys = [
@@ -111,6 +116,7 @@ export const getHoldingsTableData = (livePrices: any, holdings: any) => {
         "usd_1h_percent_change",
         "usd_30d_percent_change",
         "usd_1y_percent_change",
+        "usd_7d_percent_change",
       ];
 
       percentChangeKeys.forEach((changeKey) => {
@@ -124,6 +130,25 @@ export const getHoldingsTableData = (livePrices: any, holdings: any) => {
       combinedArr.push(coinData);
     }
   }
-  console.log(combinedObject);
-  return combinedObject;
+  console.log("test", combinedArr);
+
+  //   {
+  //     "symbol": "btc",
+  //     "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
+  //     "price_usd": 69141.46,
+  //     "usd_24h_percent_change": -1.381202275907161,
+  //     "usd_1h_percent_change": 0.0316303942472789,
+  //     "usd_30d_percent_change": 3.092995623874752,
+  //     "usd_1y_percent_change": 157.22150511367857,
+  //     "amount": 12,
+  //     "costBasis": 144,
+  //     "tradeId": "664443190a6f6001d5e9f9e3",
+  //     "id": "bitcoin",
+  //     "usd_24h_actual_change": -954.9834191154395,
+  //     "usd_1h_actual_change": 21.869716386324644,
+  //     "usd_30d_actual_change": 2138.5423320831123,
+  //     "usd_1y_actual_change": 108705.24406957204
+  // }
+
+  return combinedArr;
 };
