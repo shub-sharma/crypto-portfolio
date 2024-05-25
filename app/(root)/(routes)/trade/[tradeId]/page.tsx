@@ -22,6 +22,8 @@ const TradeIdPage = ({ params }: TradeIdPageProps) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [tickersList, setTickersList] = useState([]);
+  const [tickersListRaw, setTickersRaw] = useState([]);
+
   const [tradeType, setTradeType] = useState("Add");
 
   const tradeIdParam = params.tradeId;
@@ -36,6 +38,10 @@ const TradeIdPage = ({ params }: TradeIdPageProps) => {
           setErrorMessage("Failed to obtain tickers list");
         }
         const jsonData = await response.json();
+
+        setTickersRaw(jsonData);
+
+        console.log("ticker data: ", jsonData);
         console.log(jsonData);
         const tickers = jsonData.map((ticker) => ({
           label: `${ticker.name} (${ticker.symbol.toUpperCase()})`,
@@ -85,6 +91,7 @@ const TradeIdPage = ({ params }: TradeIdPageProps) => {
       (Object.keys(tradeInfo).length > 0 || tradeIdParam === "new") ? (
         <TradeForm
           tickersList={tickersList}
+          tickersListRaw={tickersListRaw}
           tradeType={tradeType}
           initialTradeInfoData={
             Object.keys(tradeInfo).length === 0 ? null : tradeInfo

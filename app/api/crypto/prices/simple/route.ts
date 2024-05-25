@@ -385,7 +385,7 @@ export async function POST(req: Request) {
       return acc;
     }, {});
 
-    // console.log("JSON Data: ", jsonData);
+    console.log("JSON Data: ", jsonData);
 
     // console.log("Data returned: ", transformedData);
 

@@ -70,21 +70,15 @@ export function DataTable<TData, TValue>({
       editTrade: (id: string) => {
         router.push(`/trade/${id}`);
       },
-      deleteTrades: async (tickerId: string) => {
+      deleteTrade: (tickerId: string) => {
         const hasConfirmed = confirm(
           `Are you sure you want to delete ${tickerId}?`
         );
 
-        console.log("delete trade id: ", tickerId);
-
         if (hasConfirmed) {
           try {
-            const response = await fetch(`/api/trade/`, {
+            const response = fetch(`/api/trade/${tickerId}`, {
               method: "DELETE",
-              body: JSON.stringify({ ticker: tickerId }),
-              headers: {
-                "Content-Type": "application/json",
-              },
             });
 
             if (response.ok) {

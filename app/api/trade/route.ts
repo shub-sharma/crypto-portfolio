@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const user = await currentUser();
-    const { ticker, type, date, amount, price } = body;
+    const { ticker, type, date, amount, price, symbol, name, image } = body;
     if (!user || !user.id || !user.firstName) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -26,6 +26,9 @@ export async function POST(req: Request) {
       date,
       amount,
       price,
+      symbol,
+      name,
+      image,
     });
 
     await newTrade.save();
@@ -42,11 +45,12 @@ export async function GET() {
   try {
     const dbUserId = await signInAndGetSession();
 
-    const trades = await Trade.find({ holder: dbUserId }).populate({
-      path: "holder",
-      model: User,
-    });
-    console.log(trades);
+    const trades = await Trade.find({ holder: dbUserId })
+      .populate({
+        path: "holder",
+        model: User,
+      })
+      .sort({ date: "desc" });
 
     return new NextResponse(JSON.stringify(trades), { status: 200 });
   } catch (error) {
@@ -63,6 +67,7 @@ export async function DELETE(req: Request) {
 
     const body = await req.json();
     const { ticker } = body;
+
     // Delete all trades for the given ticker name for the holder
 
     const trades = await Trade.deleteMany({

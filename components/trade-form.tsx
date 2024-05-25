@@ -61,6 +61,7 @@ interface TradeInfo {
 
 interface TradeFormProps {
   tickersList: any;
+  tickersListRaw: any;
   tradeType: string;
   initialTradeInfoData: TradeInfo | null | {};
 }
@@ -91,6 +92,7 @@ export const TradeForm = ({
   tickersList,
   tradeType,
   initialTradeInfoData,
+  tickersListRaw,
 }: TradeFormProps) => {
   const router = useRouter();
   const { toast } = useToast();
@@ -112,18 +114,46 @@ export const TradeForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      const foundItem = tickersListRaw.find(
+        (item) => item.id === values.ticker
+      );
+      console.log(foundItem);
+
+      let updatedValues = {
+        ...values,
+        symbol: foundItem.symbol,
+        name: foundItem.name,
+      };
+
+      const tickersDataResponse = await fetch("/api/crypto/prices/simple", {
+        method: "POST",
+        body: JSON.stringify([updatedValues.ticker]),
+      });
+
+      if (!tickersDataResponse.ok) {
+        toast({
+          variant: "destructive",
+          description: "Something went wrong",
+        });
+        return;
+      }
+      const simplePriceData = await tickersDataResponse.json();
+      updatedValues.image = simplePriceData[updatedValues.ticker]["image"];
+
       console.log("Submitting ", values);
       let response: any;
       if (initialTradeInfoData) {
         // call patch to edit trade
         response = await fetch(`/api/trade/${initialTradeInfoData.tradeId}`, {
           method: "PATCH",
-          body: JSON.stringify(values),
+          body: JSON.stringify(updatedValues),
         });
       } else {
+        console.log("Adding new item");
+
         response = await fetch("/api/trade", {
           method: "POST",
-          body: JSON.stringify(values),
+          body: JSON.stringify(updatedValues),
         });
       }
 

@@ -9,6 +9,7 @@ import {
   getPercentageChange,
   calculateHoldingsSummary,
   getHoldingsTableData,
+  transformHistoricalCoinsData,
 } from "@/utils/crypto-utils";
 import { Header } from "@/components/header";
 import { Percent, DollarSign, Briefcase, TrendingUp } from "lucide-react";
@@ -22,6 +23,7 @@ const RootPage = () => {
   const [holdings, setHoldings] = useState([]);
   const [holdingsSummary, setHoldingsSummary] = useState({});
   const [holdingsTableData, setHoldingsTableData] = useState([]);
+  const [historicalChartData, setHistoricalChartData] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
@@ -37,6 +39,8 @@ const RootPage = () => {
         // Fetch user's trades
         const tradeJsonData = await tradeResponse.json();
         setTrades(tradeJsonData);
+        console.log(tradeJsonData);
+
         const holdings = calculateHoldings(tradeJsonData);
         console.log(holdings);
         setHoldings(holdings);
@@ -54,17 +58,41 @@ const RootPage = () => {
         const simplePricesJsonData = await simplePricesResponse.json();
         console.log(simplePricesJsonData);
 
-        setHoldingsSummary(
-          calculateHoldingsSummary(simplePricesJsonData, holdings)
+        const holdingsSummary = calculateHoldingsSummary(
+          simplePricesJsonData,
+          holdings
         );
 
+        console.log("holdings summary", holdingsSummary);
+
+        // TODO: Charts stuff, need to get a api rate limit increase to use this :(
+        // Only show chart on click in the table.
+        // // Generate the chart data based on tickers list
+        // const historicalPricesResponse = await fetch(
+        //   "/api/crypto/prices/historical",
+        //   {
+        //     method: "POST",
+        //     body: JSON.stringify({ tickersList, days: 365 }),
+        //   }
+        // );
+
+        // if (!historicalPricesResponse.ok) {
+        //   setErrorMessage("Failed to obtain crypto historical price data");
+        // }
+        // const historicalPriceJsonData = await historicalPricesResponse.json();
+        // console.log(historicalPriceJsonData);
+
+        // const transformedChartData = transformHistoricalCoinsData(
+        //   historicalPriceJsonData,
+        //   holdings
+        // );
+
+        setHistoricalChartData([]);
+
+        setHoldingsSummary(holdingsSummary);
         setHoldingsTableData(
           getHoldingsTableData(simplePricesJsonData, holdings)
         );
-
-        // Use the prices got from previous call + a call to ticker list's image via coingecko. Combine them to get a list of assets to display in table data.
-
-        // setTickersList(tickers);
       } catch (error) {
         setErrorMessage(`Error fetching data: ${error}`);
       } finally {
@@ -77,16 +105,15 @@ const RootPage = () => {
 
   return (
     <>
-      {loading === false &&
-      trades.length > 0 &&
-      Object.keys(holdingsSummary).length > 0 &&
-      holdingsTableData.length > 0 ? (
+      {loading === false ? (
         <div className="h-full p-4 space-y-2 max-w-7xl mx-auto">
           <div className="space-y-2 w-full col-span-2">
             <div>
               <h3 className="text-lg font-medium">Dashboard</h3>
               <p className="text-sm text-muted-foreground">
-                Monitor your cryptocurrency holdings (in USD)
+                {trades.length > 0
+                  ? "Monitor your cryptocurrency holdings (in USD)"
+                  : "Add some trades to view your holdings"}
               </p>
             </div>
             <Separator className="bg-primary/10" />

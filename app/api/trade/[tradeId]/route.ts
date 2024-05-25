@@ -3,6 +3,7 @@ import User from "@/models/user";
 import { connectToDB } from "@/utils/database";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { signInAndGetSession } from "@/utils/get-session";
 
 export async function PATCH(
   req: Request,
@@ -11,7 +12,7 @@ export async function PATCH(
   try {
     const body = await req.json();
     const user = await currentUser();
-    const { ticker, type, date, amount, price } = body;
+    const { ticker, type, date, amount, price, symbol, name, image } = body;
     if (!user || !user.id || !user.firstName) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -37,6 +38,10 @@ export async function PATCH(
     existingTrade.date = date;
     existingTrade.amount = amount;
     existingTrade.price = price;
+    existingTrade.symbol = symbol;
+    existingTrade.name = name;
+    existingTrade.image = image;
+
     // Update the trade with new data
 
     await existingTrade.save();
@@ -71,6 +76,29 @@ export async function GET(
   } catch (error) {
     console.log("[TRADE GET]", error);
     return new NextResponse("Internal server while retrieving trades", {
+      status: 500,
+    });
+  }
+}
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { tradeId: string } }
+) {
+  try {
+    // Delete all trades for the given ticker name for the holder
+
+    const trades = await Trade.findByIdAndDelete(params.tradeId).populate({
+      path: "holder",
+      model: User,
+    });
+
+    console.log(trades);
+
+    return new NextResponse(JSON.stringify(trades), { status: 200 });
+  } catch (error) {
+    console.log("[TRADE DELETE]", error);
+    return new NextResponse("Internal server while deleting a trade", {
       status: 500,
     });
   }
