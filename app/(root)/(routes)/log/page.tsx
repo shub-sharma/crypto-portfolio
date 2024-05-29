@@ -1,24 +1,12 @@
 "use client";
-import { UserButton } from "@clerk/nextjs";
-import { SearchInput } from "@/components/search-input";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
-import {
-  calculateHoldings,
-  formatDollar,
-  getPercentageChange,
-  calculateHoldingsSummary,
-  getHoldingsTableData,
-  getTradeTableData,
-} from "@/utils/crypto-utils";
 import { Header } from "@/components/header";
-import { Percent, DollarSign, Briefcase, TrendingUp } from "lucide-react";
-import GenericCard from "@/components/generic-card";
 
 import { DataTable } from "@/components/trades-table/data-table";
 import { columns } from "@/components/trades-table/columns";
 
-const RootPage = () => {
+const LogPage = () => {
   const [tradesTableData, setTradesTableData] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -85,4 +73,4 @@ const RootPage = () => {
   );
 };
 
-export default RootPage;
+export default LogPage;

@@ -106,8 +106,8 @@ export const columns: ColumnDef<Trade>[] = [
         <div
           className={
             transactionType === "Sell"
-              ? "text-right font-small text-red-500 mr-4"
-              : "text-right font-small text-green-500 mr-4"
+              ? "text-right font-small text-red-600 mr-4"
+              : "text-right font-small text-green-600 mr-4"
           }
         >
           {transactionType}

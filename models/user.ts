@@ -11,6 +11,14 @@ const UserSchema = new Schema({
     unique: [true, "Username already exists"],
     required: [true, "Username is required"],
   },
+  public: {
+    type: Boolean,
+    required: [true, "Public profile boolean is required"],
+  },
+  image: {
+    type: String,
+    required: [true, "Profile image is required"],
+  },
 });
 
 // models object is provided by mongoose and stores all registered models

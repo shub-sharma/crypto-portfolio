@@ -34,8 +34,8 @@ export const GenericCard = ({
           <p
             className={
               description_percent_change < 0
-                ? "mt-1 text-sm text-red-500"
-                : "mt-1 text-sm  text-green-500"
+                ? "mt-1 text-sm  text-red-600"
+                : "mt-1 text-sm  text-green-600"
             }
           >
             {description_percent_change}%

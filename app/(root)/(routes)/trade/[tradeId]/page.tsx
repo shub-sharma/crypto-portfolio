@@ -38,7 +38,7 @@ const TradeIdPage = ({ params }: TradeIdPageProps) => {
           setErrorMessage("Failed to obtain tickers list");
         }
         const jsonData = await response.json();
-
+        console.log(jsonData.slice(0, 50));
         setTickersRaw(jsonData);
 
         console.log("ticker data: ", jsonData);

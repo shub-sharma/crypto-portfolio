@@ -8,6 +8,11 @@ export async function POST(req: Request) {
         status: 400,
       });
     }
+    if (tickersList.length === 0) {
+      return new NextResponse("Ticker list must be greater than 0", {
+        status: 200,
+      });
+    }
 
     //TODO: Remove
     // const jsonData = [

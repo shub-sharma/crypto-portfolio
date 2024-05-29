@@ -1,5 +1,5 @@
 import Trade from "@/models/trade";
-import { signInAndGetSession } from "@/utils/get-session";
+import { signInAndGetSession, generateFakeData } from "@/utils/get-session";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import User from "@/models/user";
@@ -18,7 +18,6 @@ export async function POST(req: Request) {
     }
     // connect to db
     const dbUserId = await signInAndGetSession();
-    Trade;
     const newTrade = new Trade({
       holder: dbUserId,
       ticker,
@@ -30,6 +29,8 @@ export async function POST(req: Request) {
       name,
       image,
     });
+
+    console.log("adding new trade: ", newTrade);
 
     await newTrade.save();
     return new NextResponse(JSON.stringify(newTrade), { status: 201 });

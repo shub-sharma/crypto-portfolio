@@ -64,7 +64,10 @@ export const getPercentageChange = (
 export const calculateHoldingsSummary = (livePrices: any, holdings: any) => {
   let totalCostBasis = 0;
   let totalHoldingsValue = 0;
+  let totalOneHourChangeValue = 0;
   let totalOneDayChangeValue = 0;
+  let totalSevenDayChangeValue = 0;
+  let totalOneYearChangeValue = 0;
 
   for (const [key, value] of Object.entries(holdings)) {
     const livePrice = livePrices[key];
@@ -72,15 +75,33 @@ export const calculateHoldingsSummary = (livePrices: any, holdings: any) => {
       const holdingValue = value.amount * livePrice.price_usd;
       totalCostBasis += value.costBasis;
       totalHoldingsValue += holdingValue;
+      totalOneHourChangeValue +=
+        (holdingValue * livePrice.usd_1h_percent_change) / 100;
       totalOneDayChangeValue +=
         (holdingValue * livePrice.usd_24h_percent_change) / 100;
+      totalSevenDayChangeValue +=
+        (holdingValue * livePrice.usd_7d_percent_change) / 100;
+      totalOneYearChangeValue +=
+        (holdingValue * livePrice.usd_1y_percent_change) / 100;
     }
   }
 
   const netProfit = totalHoldingsValue - totalCostBasis;
   const netProfitPercentage = ((netProfit / totalCostBasis) * 100).toFixed(2);
+  const oneHourChangePercentage = (
+    (totalOneHourChangeValue / totalHoldingsValue) *
+    100
+  ).toFixed(2);
   const oneDayChangePercentage = (
     (totalOneDayChangeValue / totalHoldingsValue) *
+    100
+  ).toFixed(2);
+  const sevenDayChangePercentage = (
+    (totalSevenDayChangeValue / totalHoldingsValue) *
+    100
+  ).toFixed(2);
+  const oneYearChangePercentage = (
+    (totalOneYearChangeValue / totalHoldingsValue) *
     100
   ).toFixed(2);
   return {
@@ -93,6 +114,18 @@ export const calculateHoldingsSummary = (livePrices: any, holdings: any) => {
     one_day_change_value: {
       value: totalOneDayChangeValue,
       percentage: oneDayChangePercentage,
+    },
+    one_hour_change_value: {
+      value: totalOneHourChangeValue,
+      percentage: oneHourChangePercentage,
+    },
+    seven_day_change_value: {
+      value: totalSevenDayChangeValue,
+      percentage: sevenDayChangePercentage,
+    },
+    one_year_change_value: {
+      value: totalOneYearChangeValue,
+      percentage: oneYearChangePercentage,
     },
   };
 };
@@ -133,23 +166,43 @@ export const getHoldingsTableData = (livePrices: any, holdings: any) => {
   }
   console.log("test", combinedArr);
 
-  //   {
-  //     "symbol": "btc",
-  //     "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
-  //     "price_usd": 69141.46,
-  //     "usd_24h_percent_change": -1.381202275907161,
-  //     "usd_1h_percent_change": 0.0316303942472789,
-  //     "usd_30d_percent_change": 3.092995623874752,
-  //     "usd_1y_percent_change": 157.22150511367857,
-  //     "amount": 12,
-  //     "costBasis": 144,
-  //     "tradeId": "664443190a6f6001d5e9f9e3",
-  //     "id": "bitcoin",
-  //     "usd_24h_actual_change": -954.9834191154395,
-  //     "usd_1h_actual_change": 21.869716386324644,
-  //     "usd_30d_actual_change": 2138.5423320831123,
-  //     "usd_1y_actual_change": 108705.24406957204
-  // }
-
   return combinedArr;
+};
+
+export const getLeaderboardTableData = (
+  livePrices: any,
+  usersAndHoldings: any
+) => {
+  const tableData: any = [];
+
+  usersAndHoldings.forEach((userAndHolding: any) => {
+    const holdingSummary = calculateHoldingsSummary(
+      livePrices,
+      userAndHolding.holdings
+    );
+
+    const tableRow = {
+      id: userAndHolding.user.userId,
+      username: userAndHolding.user.username,
+      image: userAndHolding.user.image,
+      total_holdings_value: holdingSummary.total_holdings_value,
+      one_hour_change_percentage: parseFloat(
+        holdingSummary.one_hour_change_value.percentage
+      ).toFixed(2),
+      one_day_change_percentage: parseFloat(
+        holdingSummary.one_day_change_value.percentage
+      ).toFixed(2),
+      seven_day_change_percentage: parseFloat(
+        holdingSummary.seven_day_change_value.percentage
+      ).toFixed(2),
+
+      one_year_change_percentage: parseFloat(
+        holdingSummary.one_year_change_value.percentage
+      ).toFixed(2),
+    };
+
+    tableData.push(tableRow);
+  });
+
+  return tableData;
 };

@@ -182,8 +182,8 @@ export const columns: ColumnDef<Holding>[] = [
         <div
           className={
             net < 0
-              ? "text-right font-small text-red-500 mr-4"
-              : "text-right font-small text-green-500 mr-4"
+              ? "text-right font-small text-red-600 mr-4"
+              : "text-right font-small text-green-600 mr-4"
           }
         >
           {formatDollar(net, 2)}
@@ -215,8 +215,8 @@ export const columns: ColumnDef<Holding>[] = [
         <div
           className={
             percent < 0
-              ? "text-right font-small text-red-500 mr-4"
-              : "text-right font-small text-green-500 mr-4"
+              ? "text-right font-small text-red-600 mr-4"
+              : "text-right font-small text-green-600 mr-4"
           }
         >
           {percent}%
@@ -247,8 +247,8 @@ export const columns: ColumnDef<Holding>[] = [
         <div
           className={
             percent < 0
-              ? "text-right font-small text-red-500 mr-4"
-              : "text-right font-small text-green-500 mr-4"
+              ? "text-right font-small text-red-600 mr-4"
+              : "text-right font-small text-green-600 mr-4"
           }
         >
           {percent}%

@@ -9,7 +9,6 @@ import {
   getPercentageChange,
   calculateHoldingsSummary,
   getHoldingsTableData,
-  transformHistoricalCoinsData,
 } from "@/utils/crypto-utils";
 import { Header } from "@/components/header";
 import { Percent, DollarSign, Briefcase, TrendingUp } from "lucide-react";
@@ -23,7 +22,6 @@ const RootPage = () => {
   const [holdings, setHoldings] = useState([]);
   const [holdingsSummary, setHoldingsSummary] = useState({});
   const [holdingsTableData, setHoldingsTableData] = useState([]);
-  const [historicalChartData, setHistoricalChartData] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
@@ -46,53 +44,60 @@ const RootPage = () => {
         setHoldings(holdings);
 
         const tickersList = Object.keys(holdings);
-        // Fetch current market price data for cards
-        const simplePricesResponse = await fetch("/api/crypto/prices/simple", {
-          method: "POST",
-          body: JSON.stringify(tickersList),
-        });
+        if (tickersList.length > 0) {
+          // Fetch current market price data for cards
+          const simplePricesResponse = await fetch(
+            "/api/crypto/prices/simple",
+            {
+              method: "POST",
+              body: JSON.stringify(tickersList),
+            }
+          );
 
-        if (!simplePricesResponse.ok) {
-          setErrorMessage("Failed to obtain crypto price data");
+          if (!simplePricesResponse.ok) {
+            setErrorMessage("Failed to obtain crypto price data");
+          }
+          const simplePricesJsonData = await simplePricesResponse.json();
+          console.log(simplePricesJsonData);
+
+          const holdingsSummary = calculateHoldingsSummary(
+            simplePricesJsonData,
+            holdings
+          );
+
+          console.log("holdings summary", holdingsSummary);
+
+          // TODO: Charts stuff, need to get a api rate limit increase to use this :(
+          // Only show chart on click in the table.
+          // // Generate the chart data based on tickers list
+          // const historicalPricesResponse = await fetch(
+          //   "/api/crypto/prices/historical",
+          //   {
+          //     method: "POST",
+          //     body: JSON.stringify({ tickersList, days: 365 }),
+          //   }
+          // );
+
+          // if (!historicalPricesResponse.ok) {
+          //   setErrorMessage("Failed to obtain crypto historical price data");
+          // }
+          // const historicalPriceJsonData = await historicalPricesResponse.json();
+          // console.log(historicalPriceJsonData);
+
+          // const transformedChartData = transformHistoricalCoinsData(
+          //   historicalPriceJsonData,
+          //   holdings
+          // );
+
+          setHoldingsSummary(holdingsSummary);
+          setHoldingsTableData(
+            getHoldingsTableData(simplePricesJsonData, holdings)
+          );
+          console.log(
+            "holdinsg data:",
+            getHoldingsTableData(simplePricesJsonData, holdings)
+          );
         }
-        const simplePricesJsonData = await simplePricesResponse.json();
-        console.log(simplePricesJsonData);
-
-        const holdingsSummary = calculateHoldingsSummary(
-          simplePricesJsonData,
-          holdings
-        );
-
-        console.log("holdings summary", holdingsSummary);
-
-        // TODO: Charts stuff, need to get a api rate limit increase to use this :(
-        // Only show chart on click in the table.
-        // // Generate the chart data based on tickers list
-        // const historicalPricesResponse = await fetch(
-        //   "/api/crypto/prices/historical",
-        //   {
-        //     method: "POST",
-        //     body: JSON.stringify({ tickersList, days: 365 }),
-        //   }
-        // );
-
-        // if (!historicalPricesResponse.ok) {
-        //   setErrorMessage("Failed to obtain crypto historical price data");
-        // }
-        // const historicalPriceJsonData = await historicalPricesResponse.json();
-        // console.log(historicalPriceJsonData);
-
-        // const transformedChartData = transformHistoricalCoinsData(
-        //   historicalPriceJsonData,
-        //   holdings
-        // );
-
-        setHistoricalChartData([]);
-
-        setHoldingsSummary(holdingsSummary);
-        setHoldingsTableData(
-          getHoldingsTableData(simplePricesJsonData, holdings)
-        );
       } catch (error) {
         setErrorMessage(`Error fetching data: ${error}`);
       } finally {
@@ -118,43 +123,54 @@ const RootPage = () => {
             </div>
             <Separator className="bg-primary/10" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <GenericCard
-              title="Total Cost Basis"
-              content={formatDollar(holdingsSummary["total_cost_basis"], 2)}
-              icon={<DollarSign className="h-6 w-6 text-muted-foreground" />}
-              description="All time"
-              description_percent_change={undefined}
-            />
-            <GenericCard
-              title="Holdings"
-              content={formatDollar(holdingsSummary["total_holdings_value"], 2)}
-              icon={<Briefcase className="h-6 w-6 text-muted-foreground" />}
-              description={`${Object.keys(holdings).length} assets`}
-              description_percent_change={undefined}
-            />
-            <GenericCard
-              title="Net Profit"
-              content={formatDollar(holdingsSummary["net_profit"]["value"], 2)}
-              icon={<TrendingUp className="h-6 w-6 text-muted-foreground" />}
-              description_percent_change={
-                holdingsSummary["net_profit"]["percentage"]
-              }
-              description={undefined}
-            />
-            <GenericCard
-              title="1d Change"
-              content={formatDollar(
-                holdingsSummary["one_day_change_value"]["value"],
-                2
-              )}
-              icon={<Percent className="h-6 w-6 text-muted-foreground" />}
-              description_percent_change={
-                holdingsSummary["one_day_change_value"]["percentage"]
-              }
-              description={undefined}
-            />
-          </div>
+          {Object.keys(holdingsSummary).length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <GenericCard
+                title="Total Cost Basis"
+                content={formatDollar(holdingsSummary["total_cost_basis"], 2)}
+                icon={<DollarSign className="h-6 w-6 text-muted-foreground" />}
+                description="All time"
+                description_percent_change={undefined}
+              />
+              <GenericCard
+                title="Holdings"
+                content={formatDollar(
+                  holdingsSummary["total_holdings_value"],
+                  2
+                )}
+                icon={<Briefcase className="h-6 w-6 text-muted-foreground" />}
+                description={`${Object.keys(holdings).length} assets`}
+                description_percent_change={undefined}
+              />
+              <GenericCard
+                title="Net Profit"
+                content={formatDollar(
+                  holdingsSummary["net_profit"]["value"],
+                  2
+                )}
+                icon={<TrendingUp className="h-6 w-6 text-muted-foreground" />}
+                description_percent_change={
+                  holdingsSummary["net_profit"]["percentage"]
+                }
+                description={undefined}
+              />
+              <GenericCard
+                title="1d Change"
+                content={formatDollar(
+                  holdingsSummary["one_day_change_value"]["value"],
+                  2
+                )}
+                icon={<Percent className="h-6 w-6 text-muted-foreground" />}
+                description_percent_change={
+                  holdingsSummary["one_day_change_value"]["percentage"]
+                }
+                description={undefined}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+
           <DataTable columns={columns} data={holdingsTableData} />
         </div>
       ) : errorMessage.length > 0 ? (
