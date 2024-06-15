@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CryptoTracker Pro
+A full-stack web application built to manage your cryptocurrency portfolio and securely log trades. It's extremely useful for tracking trades to ensure easier tax reporting.
 
-## Getting Started
+Check out the live version [here](https://google.com)!
 
-First, run the development server:
+## Table of Contents
+- [CryptoTracker Pro](#cryptotracker-pro)
+  - [Table of Contents](#table-of-contents)
+  - [Demo](#demo)
+  - [Features](#features)
+  - [Tools](#tools)
+  - [Limitations](#limitations)
+  - [Installation](#installation)
+  - [Contributing](#contributing)
+  - [License](#license)
 
+## Demo
+- Authentication and home page portfolio
+![Authentication and home page flow](/readme_gifs/authenticate.gif)
+
+- Editing a trade & viewing trade log
+![Edit a trade and view trade log](/readme_gifs/edittrade.gif)
+
+- Leaderboards to compete with other investors/traders
+![Leaderboards](/readme_gifs/leaderboards.gif)
+
+## Features
+- **Secure Authentication:**
+  - Sign in/out using Google, GitHub, or Microsoft.
+  - Modify your user profile data (username, image, etc.).
+
+
+- **User Interface:**
+  - Smooth and elegant UI with light/dark mode.
+  - Easy navigation and crypto tracking functionality.
+
+- **Trade Log:**
+  - Create, read, update, and delete trades.
+  - Useful for tax reporting.
+
+- **Leaderboards:**
+  - Compete with other investors/traders.
+  - Option to switch between public or private profile.
+
+- **Profiles:**
+  - View your profile or others' public profiles.
+  - Learn more about other users using the app.
+
+## Tools
+- **Next.js, Tailwind CSS, shadcn ui** (for beautiful UI components such as tables, buttons, etc.)
+- **Clerk** for authentication.
+- **CoinGecko API** for the current crypto data
+- **MongoDB** for storing trades & users on the app.
+
+## Limitations
+- **CoinGecko API:**
+  - Free-tier version allows a maximum of 5 requests per minute.
+  - Exceeding this limit may make the application non-responsive as it wohn't be able to get real-time crypto data (such as prices, 1 hour change etc.)
+  - If this happens, wait a few minutes and try again.
+
+*The application works perfectly. I just didn't want to pay for a CoinGecko API key when the free-tier was sufficient.*
+
+## Installation
+1. Clone the repository and install the dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Setup environment variables by creating a `.env` file in the root directory and add the required variables.
+3. Start the development server
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. Open your browser and navigate to `http://localhost:3000`
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Contributing
+Contributions are welcome! Please fork the repository and submit a pull request.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## License
+This project is licensed under the MIT License. See the LICENSE file for more details.

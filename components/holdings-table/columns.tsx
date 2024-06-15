@@ -37,7 +37,7 @@ export const columns: ColumnDef<Holding>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Name
+            <div className="text-base">Name</div>
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -55,10 +55,10 @@ export const columns: ColumnDef<Holding>[] = [
             className="rounded-full"
           />
           <div className="flex flex-col md:flex-row md:items-center mt-2 md:mt-0">
-            <p className="text-sm text-foreground font-bold md:mr-2">
+            <p className="text-base text-foreground font-bold md:mr-2">
               {row.getValue("name")}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               {row.original.symbol.toUpperCase()}
             </p>
           </div>
@@ -75,7 +75,7 @@ export const columns: ColumnDef<Holding>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Price
+            <div className="text-base">Price</div>{" "}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -84,7 +84,7 @@ export const columns: ColumnDef<Holding>[] = [
     cell: ({ row }) => {
       const costBasis = parseFloat(row.getValue("price_usd"));
       return (
-        <div className="text-right font-small mr-4">
+        <div className="text-right text-base mr-4">
           {formatDollar(costBasis)}
         </div>
       );
@@ -99,7 +99,7 @@ export const columns: ColumnDef<Holding>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Amount
+            <div className="text-base">Amount</div>{" "}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -108,7 +108,7 @@ export const columns: ColumnDef<Holding>[] = [
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
 
-      return <div className="text-right font-small mr-4">{amount}</div>;
+      return <div className="text-right text-base mr-4">{amount}</div>;
     },
   },
   {
@@ -120,7 +120,7 @@ export const columns: ColumnDef<Holding>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Holding
+            <div className="text-base">Holding</div>
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -129,7 +129,7 @@ export const columns: ColumnDef<Holding>[] = [
     cell: ({ row }) => {
       const total = parseFloat(row.getValue("amount_in_usd"));
       return (
-        <div className="text-right font-small mr-4">
+        <div className="text-right text-base mr-4">
           {formatDollar(total, 2)}
         </div>
       );
@@ -144,7 +144,7 @@ export const columns: ColumnDef<Holding>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Total Cost
+            <div className="text-base">Total Cost</div>
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -153,7 +153,7 @@ export const columns: ColumnDef<Holding>[] = [
     cell: ({ row }) => {
       const costBasis = parseFloat(row.getValue("costBasis"));
       return (
-        <div className="text-right font-small mr-4">
+        <div className="text-right text-base mr-4">
           {formatDollar(costBasis)}
         </div>
       );
@@ -169,7 +169,7 @@ export const columns: ColumnDef<Holding>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Net Profit
+            <div className="text-base">Net Profit</div>
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -182,8 +182,8 @@ export const columns: ColumnDef<Holding>[] = [
         <div
           className={
             net < 0
-              ? "text-right font-small text-red-600 mr-4"
-              : "text-right font-small text-green-600 mr-4"
+              ? "text-right text-base text-red-600 mr-4"
+              : "text-right text-base text-green-600 mr-4"
           }
         >
           {formatDollar(net, 2)}
@@ -201,7 +201,7 @@ export const columns: ColumnDef<Holding>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            24h %
+            <div className="text-base">24h %</div>
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -215,8 +215,8 @@ export const columns: ColumnDef<Holding>[] = [
         <div
           className={
             percent < 0
-              ? "text-right font-small text-red-600 mr-4"
-              : "text-right font-small text-green-600 mr-4"
+              ? "text-right text-base text-red-600 mr-4"
+              : "text-right text-base text-green-600 mr-4"
           }
         >
           {percent}%
@@ -233,7 +233,7 @@ export const columns: ColumnDef<Holding>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            7d %
+            <div className="text-base">7d %</div>{" "}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -247,8 +247,8 @@ export const columns: ColumnDef<Holding>[] = [
         <div
           className={
             percent < 0
-              ? "text-right font-small text-red-600 mr-4"
-              : "text-right font-small text-green-600 mr-4"
+              ? "text-right text-base text-red-600 mr-4"
+              : "text-right text-base text-green-600 mr-4"
           }
         >
           {percent}%

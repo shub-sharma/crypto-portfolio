@@ -179,7 +179,7 @@ export const TradeForm = ({
   };
 
   return (
-    <div className="h-full p-4 space-y-2 max-w-7xl mx-auto">
+    <div className="h-full p-4 space-y-2 max-w-[100rem] mx-auto">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

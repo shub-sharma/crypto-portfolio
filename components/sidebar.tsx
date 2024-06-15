@@ -35,7 +35,7 @@ export const Sidebar = () => {
     },
     {
       icon: User,
-      href: "/profile",
+      href: "/profile/current",
       label: "Profile",
       pro: false,
     },

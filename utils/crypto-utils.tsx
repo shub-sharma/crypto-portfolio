@@ -182,7 +182,7 @@ export const getLeaderboardTableData = (
     );
 
     const tableRow = {
-      id: userAndHolding.user.userId,
+      id: userAndHolding.user._id,
       username: userAndHolding.user.username,
       image: userAndHolding.user.image,
       total_holdings_value: holdingSummary.total_holdings_value,

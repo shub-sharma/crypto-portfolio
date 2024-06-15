@@ -54,10 +54,10 @@ export const columns: ColumnDef<Trade>[] = [
             className="rounded-full"
           />
           <div className="flex flex-col md:flex-row md:items-center mt-2 md:mt-0">
-            <p className="text-sm text-foreground font-bold md:mr-2">
+            <p className="text-base text-foreground font-bold md:mr-2">
               {row.getValue("name")}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               {row.original.symbol.toUpperCase()}
             </p>
           </div>
@@ -74,7 +74,7 @@ export const columns: ColumnDef<Trade>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Date
+            <div className="text-base">Date</div>{" "}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -82,7 +82,11 @@ export const columns: ColumnDef<Trade>[] = [
     },
     cell: ({ row }) => {
       const dateTime: Date = new Date(row.getValue("date"));
-      return <div>{dateTime.toISOString().split("T")[0]}</div>;
+      return (
+        <div className="text-right text-base mr-4">
+          {dateTime.toISOString().split("T")[0]}
+        </div>
+      );
     },
   },
   {
@@ -94,7 +98,7 @@ export const columns: ColumnDef<Trade>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Type
+            <div className="text-base">Type</div>{" "}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -106,8 +110,8 @@ export const columns: ColumnDef<Trade>[] = [
         <div
           className={
             transactionType === "Sell"
-              ? "text-right font-small text-red-600 mr-4"
-              : "text-right font-small text-green-600 mr-4"
+              ? "text-right text-base text-red-600 mr-4"
+              : "text-right text-base text-green-600 mr-4"
           }
         >
           {transactionType}
@@ -124,7 +128,7 @@ export const columns: ColumnDef<Trade>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Amount
+            <div className="text-base">Amount</div>{" "}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -133,7 +137,7 @@ export const columns: ColumnDef<Trade>[] = [
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
 
-      return <div className="text-right font-small mr-4">{amount}</div>;
+      return <div className="text-right text-base mr-4">{amount}</div>;
     },
   },
   {
@@ -145,7 +149,7 @@ export const columns: ColumnDef<Trade>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Value
+            <div className="text-base">Value</div>{" "}
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
@@ -154,7 +158,7 @@ export const columns: ColumnDef<Trade>[] = [
     cell: ({ row }) => {
       const total = parseFloat(row.getValue("amount_in_usd"));
       return (
-        <div className="text-right font-small mr-4">
+        <div className="text-right text-base mr-4">
           {formatDollar(total, 2)}
         </div>
       );

@@ -1,6 +1,9 @@
 "use client";
 
 import * as React from "react";
+import { useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
+
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -13,6 +16,8 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
+import { User } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -98,9 +103,51 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  useEffect(() => {
+    const containsUsername = data.some(
+      (item) => item.username === user?.firstName
+    );
+
+    if (containsUsername) {
+      setIsToggled(false);
+    } else {
+      setIsToggled(true);
+    }
+  }, []);
+
+  const { user } = useUser();
+
+  const [isToggled, setIsToggled] = useState(false);
+
+  const handleToggle = () => {
+    console.log("setting to ", !isToggled);
+    setIsToggled(!isToggled);
+    try {
+      const response = fetch(`/api/trade/profile/public/${!isToggled}`, {
+        method: "PATCH",
+      });
+
+      if (response.ok) {
+        router.push("/ranking");
+
+        toast({
+          description: "Successfully updated profile visibility",
+        });
+      }
+      // router.refresh();
+      // router.push("/ranking");
+      location.reload();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description: "Something went wrong while deleting",
+      });
+    }
+  };
+
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="block sm:flex sm:items-center justify-between py-4">
         <Input
           placeholder="Search investor's name..."
           value={
@@ -111,32 +158,45 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+
+        <div className="sm:flex justify-between items-center gap-x-3">
+          <Button
+            onClick={handleToggle}
+            className={`ml-auto px-4 py-2 ${
+              isToggled ? "bg-blue-500" : "bg-gray-500"
+            }`}
+          >
+            {isToggled ? " Set profile public" : "Set profile private"}
+            <User className="h-4 w-4 fill-white text-white ml-2" />
+          </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Columns
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
       <div className="rounded-md border bg-card shadow-sm">
@@ -163,6 +223,8 @@ export function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
+                  onClick={() => testFunction(row.original)}
+                  className="cursor-pointer"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >

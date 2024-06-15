@@ -3,11 +3,7 @@ import { signInAndGetSession, generateFakeData } from "@/utils/get-session";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import User from "@/models/user";
-import {
-  calculateHoldings,
-  calculateHoldingsSummary,
-  getLeaderboardTableData,
-} from "@/utils/crypto-utils";
+import { calculateHoldings } from "@/utils/crypto-utils";
 export async function GET() {
   try {
     const dbUserId = await signInAndGetSession();
@@ -26,7 +22,7 @@ export async function GET() {
           model: User,
         })
         .sort({ date: "desc" });
-      console.log("trades: ", trades);
+      // console.log("trades: ", trades);
 
       const holdings = calculateHoldings(trades);
 

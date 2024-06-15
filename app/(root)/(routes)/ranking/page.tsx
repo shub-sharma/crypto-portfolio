@@ -7,12 +7,22 @@ import GenericCard from "@/components/generic-card";
 import { DataTable } from "@/components/leaderboard-table/data-table";
 import { columns } from "@/components/leaderboard-table/columns";
 import { getLeaderboardTableData } from "@/utils/crypto-utils";
+import { useRouter } from "next/navigation";
 
 const Leaderboard = () => {
+  const router = useRouter();
+
   const [leaderboardtableData, setLeaderboardTableData] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const testFunction = (rowData: any) => {
+    setTimeout(() => {
+      console.log("I got data", rowData);
+    }, 2000);
+    router.push(`/profile/${rowData.id}`);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,7 +63,7 @@ const Leaderboard = () => {
   return (
     <>
       {loading === false ? (
-        <div className="h-full p-4 space-y-2 max-w-7xl mx-auto">
+        <div className="h-full p-4 space-y-2 max-w-[100rem] mx-auto">
           <div className="space-y-2 w-full col-span-2">
             <div>
               <h3 className="text-lg font-medium">Crypto Leaderboard</h3>
@@ -65,7 +75,11 @@ const Leaderboard = () => {
             </div>
             <Separator className="bg-primary/10" />
           </div>
-          <DataTable columns={columns} data={leaderboardtableData} />
+          <DataTable
+            testFunction={testFunction}
+            columns={columns}
+            data={leaderboardtableData}
+          />
         </div>
       ) : errorMessage.length > 0 ? (
         <Header title="Empty Dashboard" message={errorMessage} />
