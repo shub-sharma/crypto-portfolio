@@ -2,6 +2,7 @@
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { Header } from "@/components/header";
+import Image from "next/image";
 
 interface ProfileIdPageProps {
   params: {
@@ -51,11 +52,27 @@ const ProfilePage = ({ params }: ProfileIdPageProps) => {
               <h3 className="text-lg font-medium">
                 {userProfileData.username}
               </h3>
-              <p className="text-sm text-muted-foreground">
-                View investor profile
-              </p>
+              <p className="text-sm text-muted-foreground">Investor profile</p>
             </div>
             <Separator className="bg-primary/10" />
+          </div>
+          {/* <div className="border-2 border-rose-500">Hello</div> */}
+          <div className="flex flex-col lg:flex-row items-center md:gap-3 p-4 ">
+            <Image
+              src={userProfileData.image}
+              alt={userProfileData.username}
+              width={400}
+              height={400}
+              objectFit="cover"
+              className="rounded-2xl"
+            />
+            <div className="flex flex-col md:flex-row md:items-center mt-2 md:mt-0 mx-4">
+              <p className="text-lg text-foreground font-base md:mr-2">
+                {userProfileData.userText
+                  ? userProfileData.userText
+                  : "User profile text is empty, please update it 🙂"}
+              </p>
+            </div>
           </div>
         </div>
       ) : errorMessage.length > 0 ? (

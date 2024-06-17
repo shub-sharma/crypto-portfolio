@@ -8,7 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Crypto Portfolio",
+  title: "Crypto Tracker Pro",
   description: "#1 Crypto Trading Tracker",
 };
 

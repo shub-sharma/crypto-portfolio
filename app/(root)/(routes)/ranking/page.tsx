@@ -17,7 +17,7 @@ const Leaderboard = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const testFunction = (rowData: any) => {
+  const userRedirect = (rowData: any) => {
     setTimeout(() => {
       console.log("I got data", rowData);
     }, 2000);
@@ -76,7 +76,7 @@ const Leaderboard = () => {
             <Separator className="bg-primary/10" />
           </div>
           <DataTable
-            testFunction={testFunction}
+            userRedirect={userRedirect}
             columns={columns}
             data={leaderboardtableData}
           />

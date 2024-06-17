@@ -41,11 +41,13 @@ import { useRouter } from "next/navigation";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  userRedirect: any;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  userRedirect,
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const { toast } = useToast();
@@ -223,7 +225,7 @@ export function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  onClick={() => testFunction(row.original)}
+                  onClick={() => userRedirect(row.original)}
                   className="cursor-pointer"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}

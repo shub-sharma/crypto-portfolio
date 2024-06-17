@@ -19,6 +19,10 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "Profile image is required"],
   },
+  userText: {
+    type: String,
+    required: [true, "User text is required"],
+  },
 });
 
 // models object is provided by mongoose and stores all registered models

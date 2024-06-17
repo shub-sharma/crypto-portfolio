@@ -40,7 +40,9 @@ export const Navbar = () => {
         <Button
           size="sm"
           variant="premium"
-          onClick={() => router.push("/ranking")}
+          onClick={() =>
+            router.push("https://github.com/shub-sharma/crypto-portfolio")
+          }
         >
           GitHub
           <Sparkles className="h-4 w-4 fill-white text-white ml-2" />

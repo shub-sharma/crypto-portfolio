@@ -28,6 +28,7 @@ export const signInAndGetSession = async () => {
         username: user.firstName,
         public: false,
         image: userImage,
+        userText: user.firstName,
       });
       console.log("new user", newUser);
       return newUser._id.toString();

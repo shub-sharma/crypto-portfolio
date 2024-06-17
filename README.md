@@ -24,6 +24,9 @@ Check out the live version [here](https://google.com)!
 - Leaderboards to compete with other investors/traders
 ![Leaderboards](/readme_gifs/leaderboards.gif)
 
+- Profile page to view investor profiles
+![Profile page](/readme_gifs/profile.gif)
+
 ## Features
 - **Secure Authentication:**
   - Sign in/out using Google, GitHub, or Microsoft.
@@ -34,9 +37,10 @@ Check out the live version [here](https://google.com)!
   - Smooth and elegant UI with light/dark mode.
   - Easy navigation and crypto tracking functionality.
 
-- **Trade Log:**
+- **Trades:**
   - Create, read, update, and delete trades.
-  - Useful for tax reporting.
+  - Supports up to 1000+ cryptocurrencies.
+  - Trade log lets you capture each and every trade, making it extremely useful for tax reporting.
 
 - **Leaderboards:**
   - Compete with other investors/traders.
