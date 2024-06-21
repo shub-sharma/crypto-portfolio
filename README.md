@@ -1,5 +1,5 @@
 # CryptoTracker Pro
-A full-stack web application built to manage your cryptocurrency portfolio and securely log trades. It's extremely useful for tracking trades to ensure easier tax reporting.
+A full-stack web application built to manage your cryptocurrency portfolio and securely log trades. It's extremely useful for tracking trades to ensure easier tax reporting. Come compete with the best investors in the world to see how you stack up against them!
 
 Check out the live version [here](https://google.com)!
 
