@@ -67,7 +67,7 @@ const Leaderboard = () => {
               <h3 className="text-lg font-medium">Crypto Leaderboard</h3>
               <p className="text-sm text-muted-foreground">
                 {leaderboardtableData.length > 0
-                  ? "View your rankings amongst the best investors"
+                  ? "View your ranking amongst the best investors"
                   : "Currently no investors to view..."}
               </p>
             </div>
