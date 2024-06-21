@@ -14,14 +14,7 @@ export async function GET(
     for (let page = 1; page < 3; page++) {
       try {
         const response = await fetch(
-          `${process.env.COINGECKO_API_URI}/coins/markets?vs_currency=usd&per_page=250&page=${page}`,
-          {
-            method: "GET",
-            headers: {
-              accept: "application/json",
-              "x-cg-pro-api-key": process.env.COINGECKO_API_KEY,
-            },
-          }
+          `${process.env.COINGECKO_API_URI}/coins/markets?vs_currency=usd&per_page=250&page=${page}&x_cg_demo_api_key=${process.env.COINGECKO_API_KEY}`
         );
 
         if (!response.ok) {

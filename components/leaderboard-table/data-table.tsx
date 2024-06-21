@@ -105,29 +105,28 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  useEffect(() => {
+  const { user } = useUser();
+
+  const determineInitialProfileState = () => {
     const containsUsername = data.some(
       (item) => item.username === user?.firstName
     );
+    return containsUsername ? true : false;
+  };
 
-    if (containsUsername) {
-      setIsToggled(false);
-    } else {
-      setIsToggled(true);
-    }
-  }, []);
+  const [isProfilePublic, setisProfilePublic] = useState(
+    determineInitialProfileState
+  );
 
-  const { user } = useUser();
-
-  const [isToggled, setIsToggled] = useState(false);
-
-  const handleToggle = () => {
-    console.log("setting to ", !isToggled);
-    setIsToggled(!isToggled);
+  const handleToggle = async () => {
+    setisProfilePublic(!isProfilePublic);
     try {
-      const response = fetch(`/api/trade/profile/public/${!isToggled}`, {
-        method: "PATCH",
-      });
+      const response = await fetch(
+        `/api/trade/profile/public/${!isProfilePublic}`,
+        {
+          method: "PATCH",
+        }
+      );
 
       if (response.ok) {
         router.push("/ranking");
@@ -163,13 +162,14 @@ export function DataTable<TData, TValue>({
 
         <div className="sm:flex justify-between items-center gap-x-3">
           <Button
+            variant="outline"
             onClick={handleToggle}
             className={`ml-auto px-4 py-2 ${
-              isToggled ? "bg-blue-500" : "bg-gray-500"
+              isProfilePublic ? "bg-red-400" : "bg-blue-400"
             }`}
           >
-            {isToggled ? " Set profile public" : "Set profile private"}
-            <User className="h-4 w-4 fill-white text-white ml-2" />
+            {isProfilePublic ? " Set profile private" : "Set profile public"}
+            <User className="h-4 w-4 ml-2" />
           </Button>
 
           <DropdownMenu>

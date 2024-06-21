@@ -25,14 +25,7 @@ export async function POST(req: Request) {
     tickersList.forEach(async (ticker) => {
       try {
         const response = await fetch(
-          `${process.env.COINGECKO_API_URI}/coins/${ticker}/market_chart?vs_currency=usd&days=${days}`,
-          {
-            method: "GET",
-            headers: {
-              accept: "application/json",
-              "x-cg-pro-api-key": process.env.COINGECKO_API_KEY,
-            },
-          }
+          `${process.env.COINGECKO_API_URI}/coins/${ticker}/market_chart?vs_currency=usd&days=${days}&x_cg_demo_api_key=${process.env.COINGECKO_API_KEY}`
         );
 
         if (!response.ok) {

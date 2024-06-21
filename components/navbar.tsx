@@ -31,7 +31,7 @@ export const Navbar = () => {
               font.className
             )}
           >
-            CryptoPort
+            Crypto Tracker Pro
           </h1>
         </Link>
       </div>

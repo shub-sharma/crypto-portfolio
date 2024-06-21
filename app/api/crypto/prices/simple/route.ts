@@ -17,7 +17,9 @@ export async function POST(req: Request) {
     const response = await fetch(
       `${process.env.COINGECKO_API_URI}/coins/markets?ids=${tickersList.join(
         ","
-      )}&vs_currency=usd&precision=2&price_change_percentage=1h,24h,7d,30d,1y`
+      )}&vs_currency=usd&precision=2&price_change_percentage=1h,24h,7d,30d,1y&x_cg_demo_api_key=${
+        process.env.COINGECKO_API_KEY
+      }`
     );
 
     if (!response.ok) {
