@@ -37,16 +37,22 @@ export const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-x-3">
-        <Button
-          size="sm"
-          variant="premium"
-          onClick={() =>
-            router.push("https://github.com/shub-sharma/crypto-portfolio")
-          }
+        <Link
+          href={"https://github.com/shub-sharma/crypto-portfolio"}
+          target="_blank"
         >
-          GitHub
-          <Sparkles className="h-4 w-4 fill-white text-white ml-2" />
-        </Button>
+          <Button
+            size="sm"
+            variant="premium"
+            onClick={() =>
+              router.push("https://github.com/shub-sharma/crypto-portfolio")
+            }
+            formTarget=""
+          >
+            GitHub
+            <Sparkles className="h-4 w-4 fill-white text-white ml-2" />
+          </Button>
+        </Link>
         <ModeToggle />
         <UserButton />
       </div>
