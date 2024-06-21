@@ -41,14 +41,7 @@ export const Navbar = () => {
           href={"https://github.com/shub-sharma/crypto-portfolio"}
           target="_blank"
         >
-          <Button
-            size="sm"
-            variant="premium"
-            onClick={() =>
-              router.push("https://github.com/shub-sharma/crypto-portfolio")
-            }
-            formTarget=""
-          >
+          <Button size="sm" variant="premium">
             GitHub
             <Sparkles className="h-4 w-4 fill-white text-white ml-2" />
           </Button>
