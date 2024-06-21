@@ -1,7 +1,7 @@
 # CryptoTracker Pro
 A full-stack web application built to manage your cryptocurrency portfolio and securely log trades. It's extremely useful for tracking trades to ensure easier tax reporting. Come compete with the best investors in the world to see how you stack up against them!
 
-Check out the live version [here](https://crypto-portfolio-eta.vercel.app/)!
+Check out the live version [here](https://crypto-portfolio-taupe.vercel.app)!
 
 ## Table of Contents
 - [CryptoTracker Pro](#cryptotracker-pro)
@@ -15,7 +15,7 @@ Check out the live version [here](https://crypto-portfolio-eta.vercel.app/)!
   - [License](#license)
 
 ## Demo
-- Check out the deployed app [here](https://crypto-portfolio-eta.vercel.app/)!
+- Check out the deployed app [here](https://crypto-portfolio-taupe.vercel.app)!
 - Authentication and home page portfolio
 ![Authentication and home page flow](/readme_gifs/authenticate.gif)
 
