@@ -7,8 +7,6 @@ export async function PATCH(
   { params }: { params: { makeProfilePublic: boolean } }
 ) {
   try {
-    console.log("make profile: ", params.makeProfilePublic);
-
     const dbUserId = await signInAndGetSession();
     const existingUser = await User.findById(dbUserId);
 
@@ -16,7 +14,6 @@ export async function PATCH(
       return new NextResponse("User ID not found", { status: 404 });
     }
     existingUser.public = params.makeProfilePublic;
-    console.log("existing user detials: ", existingUser);
     await existingUser.save();
 
     return new NextResponse(JSON.stringify(existingUser), { status: 201 });

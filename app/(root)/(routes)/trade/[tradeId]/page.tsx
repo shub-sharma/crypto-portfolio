@@ -29,7 +29,6 @@ const TradeIdPage = ({ params }: TradeIdPageProps) => {
   const tradeIdParam = params.tradeId;
 
   useEffect(() => {
-    console.log("test");
     const fetchData = async () => {
       try {
         const response = await fetch("/api/crypto/tickers");
@@ -38,16 +37,13 @@ const TradeIdPage = ({ params }: TradeIdPageProps) => {
           setErrorMessage("Failed to obtain tickers list");
         }
         const jsonData = await response.json();
-        console.log(jsonData.slice(0, 50));
         setTickersRaw(jsonData);
 
-        console.log("ticker data: ", jsonData);
-        console.log(jsonData);
+        // console.log(jsonData);
         const tickers = jsonData.map((ticker) => ({
           label: `${ticker.name} (${ticker.symbol.toUpperCase()})`,
           value: ticker.id,
         }));
-        console.log(tickers);
 
         setTickersList(tickers);
 
@@ -67,11 +63,9 @@ const TradeIdPage = ({ params }: TradeIdPageProps) => {
             ticker: data.ticker,
             date: new Date(data.date),
           });
-
-          console.log("got trade info", data);
         };
         if (tradeIdParam && tradeIdParam !== "new") {
-          console.log("getting trade info");
+          // console.log("getting trade info");
           getTradeInfo();
           setTradeType("Edit");
         }

@@ -30,7 +30,6 @@ export async function GET(
           symbol: ticker.symbol,
         }));
         allData.push(...tickers);
-        console.log(`Fetched data for page ${page}`);
       } catch (error) {
         console.error(error);
       }

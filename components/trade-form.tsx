@@ -97,7 +97,7 @@ export const TradeForm = ({
   const router = useRouter();
   const { toast } = useToast();
 
-  console.log("initialTradeInfoData :", initialTradeInfoData);
+  // console.log("initialTradeInfoData :", initialTradeInfoData);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -117,7 +117,7 @@ export const TradeForm = ({
       const foundItem = tickersListRaw.find(
         (item) => item.id === values.ticker
       );
-      console.log(foundItem);
+      // console.log(foundItem);
 
       let updatedValues = {
         ...values,
@@ -140,7 +140,7 @@ export const TradeForm = ({
       const simplePriceData = await tickersDataResponse.json();
       updatedValues.image = simplePriceData[updatedValues.ticker]["image"];
 
-      console.log("Submitting ", values);
+      // console.log("Submitting ", values);
       let response: any;
       if (initialTradeInfoData) {
         // call patch to edit trade
@@ -149,7 +149,7 @@ export const TradeForm = ({
           body: JSON.stringify(updatedValues),
         });
       } else {
-        console.log("Adding new item");
+        // console.log("Adding new item");
 
         response = await fetch("/api/trade", {
           method: "POST",
@@ -175,7 +175,6 @@ export const TradeForm = ({
         description: "Something went wrong",
       });
     }
-    console.log(values);
   };
 
   return (
@@ -195,12 +194,6 @@ export const TradeForm = ({
             <Separator className="bg-primary/10" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* TODO: ~Add a combobox displaying the list of tickers~
-            Add a $ placeholder for inputs 
-            - Fix up placeholder issues textboxes. 
-            - Add a `tradeNote` field indicating some note related to the trade.
-            - Do input validation and push the data to the mongodb server */}
-
             <FormField
               control={form.control}
               name="ticker"

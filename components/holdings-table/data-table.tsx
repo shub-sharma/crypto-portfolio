@@ -75,8 +75,6 @@ export function DataTable<TData, TValue>({
           `Are you sure you want to delete ${tickerId}?`
         );
 
-        console.log("delete trade id: ", tickerId);
-
         if (hasConfirmed) {
           try {
             const response = await fetch(`/api/trade/`, {

@@ -18,9 +18,7 @@ export const SearchInput = () => {
     setTicker(e.target.value);
   };
 
-  useEffect(() => {
-    console.log("query: ", debouncedTickerValue);
-  }, [debouncedTickerValue]);
+  useEffect(() => {}, [debouncedTickerValue]);
 
   return (
     //May be useful when searching the leaderboards

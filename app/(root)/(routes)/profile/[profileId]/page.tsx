@@ -13,7 +13,6 @@ interface ProfileIdPageProps {
 const ProfilePage = ({ params }: ProfileIdPageProps) => {
   let profileIdParam = params.profileId;
 
-  console.log("Profile id received: ", profileIdParam);
   //   const [tradesTableData, setTradesTableData] = useState([]);
 
   const [userProfileData, setUserProfileData] = useState({});
@@ -32,7 +31,6 @@ const ProfilePage = ({ params }: ProfileIdPageProps) => {
         // Fetch user's trades
         const userProfileJsonData = await userProfileResponse.json();
         setUserProfileData(userProfileJsonData);
-        console.log(userProfileData);
       } catch (error) {
         setErrorMessage(`Error fetching data: ${error}`);
       } finally {

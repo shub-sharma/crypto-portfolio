@@ -18,9 +18,7 @@ const Leaderboard = () => {
   const [loading, setLoading] = useState(true);
 
   const userRedirect = (rowData: any) => {
-    setTimeout(() => {
-      console.log("I got data", rowData);
-    }, 2000);
+    setTimeout(() => {}, 2000);
     router.push(`/profile/${rowData.id}`);
   };
 

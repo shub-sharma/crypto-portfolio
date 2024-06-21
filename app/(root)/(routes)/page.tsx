@@ -37,10 +37,8 @@ const RootPage = () => {
         // Fetch user's trades
         const tradeJsonData = await tradeResponse.json();
         setTrades(tradeJsonData);
-        console.log(tradeJsonData);
 
         const holdings = calculateHoldings(tradeJsonData);
-        console.log(holdings);
         setHoldings(holdings);
 
         const tickersList = Object.keys(holdings);
@@ -58,14 +56,11 @@ const RootPage = () => {
             setErrorMessage("Failed to obtain crypto price data");
           }
           const simplePricesJsonData = await simplePricesResponse.json();
-          console.log(simplePricesJsonData);
 
           const holdingsSummary = calculateHoldingsSummary(
             simplePricesJsonData,
             holdings
           );
-
-          console.log("holdings summary", holdingsSummary);
 
           // TODO: Charts stuff, need to get a api rate limit increase to use this :(
           // Only show chart on click in the table.
@@ -82,7 +77,6 @@ const RootPage = () => {
           //   setErrorMessage("Failed to obtain crypto historical price data");
           // }
           // const historicalPriceJsonData = await historicalPricesResponse.json();
-          // console.log(historicalPriceJsonData);
 
           // const transformedChartData = transformHistoricalCoinsData(
           //   historicalPriceJsonData,
@@ -93,10 +87,10 @@ const RootPage = () => {
           setHoldingsTableData(
             getHoldingsTableData(simplePricesJsonData, holdings)
           );
-          console.log(
-            "holdinsg data:",
-            getHoldingsTableData(simplePricesJsonData, holdings)
-          );
+          // console.log(
+          //   "holdinsg data:",
+          //   getHoldingsTableData(simplePricesJsonData, holdings)
+          // );
         }
       } catch (error) {
         setErrorMessage(`Error fetching data: ${error}`);

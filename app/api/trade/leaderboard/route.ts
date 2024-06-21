@@ -1,5 +1,5 @@
 import Trade from "@/models/trade";
-import { signInAndGetSession, generateFakeData } from "@/utils/get-session";
+import { signInAndGetSession } from "@/utils/get-session";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import User from "@/models/user";

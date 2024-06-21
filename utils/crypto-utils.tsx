@@ -164,7 +164,6 @@ export const getHoldingsTableData = (livePrices: any, holdings: any) => {
       combinedArr.push(coinData);
     }
   }
-  console.log("test", combinedArr);
 
   return combinedArr;
 };

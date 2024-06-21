@@ -4,7 +4,6 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    console.log("Body received", body);
     const { tickersList, days } = body;
     if (!tickersList || !Array.isArray(tickersList)) {
       return new NextResponse(
@@ -37,15 +36,12 @@ export async function POST(req: Request) {
         const coinData = {
           [ticker]: jsonData.prices,
         };
-        console.log("historical data: ", coinData);
 
         allData.push(coinData);
       } catch (error) {
         console.error(error);
       }
     });
-
-    console.log(`Fetched historical data ${allData}`);
 
     return new NextResponse(JSON.stringify(allData), { status: 200 });
   } catch (error) {

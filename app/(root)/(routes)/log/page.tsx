@@ -16,7 +16,6 @@ const LogPage = () => {
     const fetchData = async () => {
       try {
         const tradeResponse = await fetch("/api/trade");
-        console.log("statement here");
         if (!tradeResponse.ok) {
           setErrorMessage("Failed to obtain trades");
         }
@@ -31,12 +30,10 @@ const LogPage = () => {
           };
         });
 
-        console.log(tradesTableData);
         setTradesTableData(tradesTableData);
 
         // getTradeTableData(simplePricesJsonData, tradeJsonData);
         // setTradesTableData();
-        console.log("Trades data is: ", tradesTableData);
       } catch (error) {
         setErrorMessage(`Error fetching data: ${error}`);
       } finally {
