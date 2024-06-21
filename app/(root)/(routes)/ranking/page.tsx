@@ -40,7 +40,7 @@ const Leaderboard = () => {
           setErrorMessage("Failed to obtain crypto price data");
         }
         const simplePricesJsonData = await simplePricesResponse.json();
-        console.log(simplePricesJsonData);
+        // console.log(simplePricesJsonData);
 
         const tableData = getLeaderboardTableData(
           simplePricesJsonData,
