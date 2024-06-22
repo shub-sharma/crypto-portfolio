@@ -59,11 +59,11 @@ Check out the live version [here](https://crypto-portfolio-taupe.vercel.app)!
 
 ## Limitations
 - **CoinGecko API:**
-  - Free-tier version allows a maximum of 5 requests per minute.
-  - Exceeding this limit may make the application non-responsive as it wohn't be able to get real-time crypto data (such as prices, 1 hour change etc.)
+  - Free-tier version allows a maximum of 30 requests per minute.
+  - Exceeding this limit may make the application non-responsive as it won't be able to get real-time crypto data (such as prices, 1 hour change etc.)
   - If this happens, wait a few minutes and try again.
 
-*The application works perfectly. I just didn't want to pay for a CoinGecko API key when the free-tier was sufficient.*
+*If you want a higher limit, you can re-deploy the application and provide a paid CoinGecko api key to get a higher limit.*
 
 ## Installation
 1. Clone the repository and install the dependencies:
