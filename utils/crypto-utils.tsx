@@ -24,13 +24,12 @@ export const calculateHoldings = (trades: TradeInfo[]) => {
       holdings[ticker]["tradeId"] = _id;
     } else if (type === "Sell") {
       holdings[ticker]["amount"] -= amount;
-      if (holdings[ticker]["amount"] <= 0) {
-        delete holdings[ticker];
-      }
     }
   });
 
-  return holdings;
+  return Object.fromEntries(
+    Object.entries(holdings).filter(([key, value]) => value.amount > 0)
+  );
 };
 
 export const sumValues = (numArray: any) => {
