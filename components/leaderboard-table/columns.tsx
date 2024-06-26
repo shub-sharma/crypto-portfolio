@@ -9,11 +9,11 @@ export type UserHolding = {
   id: string;
   username: string;
   image: string;
-  total_holdings_value: number;
-  one_hour_change_percentage: number;
-  one_day_change_percentage: number;
-  seven_day_change_percentage: number;
-  one_year_change_percentage: number;
+  holding: number;
+  "1h %": number;
+  "1d %": number;
+  "7d %": number;
+  "1y %": number;
 };
 
 export const columns: ColumnDef<UserHolding>[] = [
@@ -53,7 +53,7 @@ export const columns: ColumnDef<UserHolding>[] = [
     },
   },
   {
-    accessorKey: "total_holdings_value",
+    accessorKey: "holding",
     header: ({ column }) => {
       return (
         <div className="flex justify-end">
@@ -70,13 +70,13 @@ export const columns: ColumnDef<UserHolding>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-right text-lg mr-4">
-          {formatDollar(row.getValue("total_holdings_value"), 2)}
+          {formatDollar(row.getValue("holding"), 2)}
         </div>
       );
     },
   },
   {
-    accessorKey: "one_hour_change_percentage",
+    accessorKey: "1h %",
     header: ({ column }) => {
       return (
         <div className="flex justify-end">
@@ -91,7 +91,7 @@ export const columns: ColumnDef<UserHolding>[] = [
       );
     },
     cell: ({ row }) => {
-      const percent = parseFloat(row.getValue("one_hour_change_percentage"));
+      const percent = parseFloat(row.getValue("1h %"));
       return (
         <div
           className={
@@ -106,7 +106,7 @@ export const columns: ColumnDef<UserHolding>[] = [
     },
   },
   {
-    accessorKey: "one_day_change_percentage",
+    accessorKey: "1d %",
     header: ({ column }) => {
       return (
         <div className="flex justify-end">
@@ -121,7 +121,7 @@ export const columns: ColumnDef<UserHolding>[] = [
       );
     },
     cell: ({ row }) => {
-      const percent = parseFloat(row.getValue("one_day_change_percentage"));
+      const percent = parseFloat(row.getValue("1d %"));
       return (
         <div
           className={
@@ -137,7 +137,7 @@ export const columns: ColumnDef<UserHolding>[] = [
   },
 
   {
-    accessorKey: "seven_day_change_percentage",
+    accessorKey: "7d %",
     header: ({ column }) => {
       return (
         <div className="flex justify-end">
@@ -152,7 +152,7 @@ export const columns: ColumnDef<UserHolding>[] = [
       );
     },
     cell: ({ row }) => {
-      const percent = parseFloat(row.getValue("seven_day_change_percentage"));
+      const percent = parseFloat(row.getValue("7d %"));
       return (
         <div
           className={
@@ -168,7 +168,7 @@ export const columns: ColumnDef<UserHolding>[] = [
   },
 
   {
-    accessorKey: "one_year_change_percentage",
+    accessorKey: "1y %",
     header: ({ column }) => {
       return (
         <div className="flex justify-end">
@@ -183,7 +183,7 @@ export const columns: ColumnDef<UserHolding>[] = [
       );
     },
     cell: ({ row }) => {
-      const percent = parseFloat(row.getValue("one_year_change_percentage"));
+      const percent = parseFloat(row.getValue("1y %"));
       return (
         <div
           className={

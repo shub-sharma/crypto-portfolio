@@ -22,7 +22,7 @@ export type Trade = {
   image: string;
   name: string;
   date: Date;
-  amount_in_usd: number;
+  value: number;
   type: string;
 };
 
@@ -141,7 +141,7 @@ export const columns: ColumnDef<Trade>[] = [
     },
   },
   {
-    accessorKey: "amount_in_usd",
+    accessorKey: "value",
     header: ({ column }) => {
       return (
         <div className="flex justify-end">
@@ -156,7 +156,7 @@ export const columns: ColumnDef<Trade>[] = [
       );
     },
     cell: ({ row }) => {
-      const total = parseFloat(row.getValue("amount_in_usd"));
+      const total = parseFloat(row.getValue("value"));
       return (
         <div className="text-right text-base mr-4">
           {formatDollar(total, 2)}

@@ -26,7 +26,7 @@ const LogPage = () => {
         const tradesTableData = tradeJsonData.map((trade: any) => {
           return {
             ...trade,
-            amount_in_usd: trade.amount * trade.price,
+            value: trade.amount * trade.price,
           };
         });
 

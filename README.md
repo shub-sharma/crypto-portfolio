@@ -1,7 +1,7 @@
 # CryptoTracker Pro
 A full-stack web application built to manage your cryptocurrency portfolio and securely log trades. It's extremely useful for tracking trades to ensure easier tax reporting. Come compete with the best investors in the world to see how you stack up against them!
 
-Check out the live version [here](https://crypto-portfolio-taupe.vercel.app)! Please the guest account if you don't wish to sign in (email: `guest@guest.com`, password: `guest`).
+Check out the live version [here](https://crypto-portfolio-taupe.vercel.app)! Please use the guest account if you don't wish to sign in (email: `guest@guest.com`, password: `guest`).
 
 ## Table of Contents
 - [CryptoTracker Pro](#cryptotracker-pro)
@@ -72,13 +72,36 @@ Check out the live version [here](https://crypto-portfolio-taupe.vercel.app)! Pl
 npm install
 ```
 
-2. Setup environment variables by creating a `.env` file in the root directory and add the required variables.
-3. Start the development server
+2. Setup environment variables by creating a `.env` file in the root directory and add the required variables. For example:
+- Setup the following environment variables:
+  - Clerk's public key and secret key for authentication
+  - Routes to use for sign up and sign in
+  - MongoDB URI as well as the database to use
+  - CoinGecko api and the CoinGecko api key to use
+
+```
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_<string>
+CLERK_SECRET_KEY=sk_test_<string>
+
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+
+MONGODB_URI=mongodb+srv://<test_string>.mongodb.net/
+MONGODB_DB=<some_db>
+
+COINGECKO_API_URI=https://api.coingecko.com/api/v3
+COINGECKO_API_KEY=<some_api_key>
+```
+
+
+1. Start the development server
 ```bash
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:3000`
+1. Open your browser and navigate to `http://localhost:3000`
 
 ## Contributing
 Contributions are welcome! Please fork the repository and submit a pull request.

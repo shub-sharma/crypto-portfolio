@@ -26,6 +26,16 @@ const RootPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const headerColumnMapping = {
+    price_usd: "Price",
+    amount_in_usd: "Holding",
+    costBasis: "Total Cost",
+    net_profit: "Net Profit",
+    usd_1h_percent_change: "1h %",
+    usd_24h_percent_change: "24h %",
+    usd_7d_percent_change: "7d %",
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -62,35 +72,22 @@ const RootPage = () => {
             holdings
           );
 
-          // TODO: Charts stuff, need to get a api rate limit increase to use this :(
-          // Only show chart on click in the table.
-          // // Generate the chart data based on tickers list
-          // const historicalPricesResponse = await fetch(
-          //   "/api/crypto/prices/historical",
-          //   {
-          //     method: "POST",
-          //     body: JSON.stringify({ tickersList, days: 365 }),
-          //   }
-          // );
-
-          // if (!historicalPricesResponse.ok) {
-          //   setErrorMessage("Failed to obtain crypto historical price data");
-          // }
-          // const historicalPriceJsonData = await historicalPricesResponse.json();
-
-          // const transformedChartData = transformHistoricalCoinsData(
-          //   historicalPriceJsonData,
-          //   holdings
-          // );
-
           setHoldingsSummary(holdingsSummary);
-          setHoldingsTableData(
-            getHoldingsTableData(simplePricesJsonData, holdings)
-          );
-          // console.log(
-          //   "holdinsg data:",
-          //   getHoldingsTableData(simplePricesJsonData, holdings)
-          // );
+
+          const modifiedArray = getHoldingsTableData(
+            simplePricesJsonData,
+            holdings
+          ).map((item) => {
+            const modifiedItem = {};
+            for (const key in item) {
+              if (item.hasOwnProperty(key)) {
+                const newKey = headerColumnMapping[key] || key;
+                modifiedItem[newKey] = item[key];
+              }
+            }
+            return modifiedItem;
+          });
+          setHoldingsTableData(modifiedArray);
         }
       } catch (error) {
         setErrorMessage(`Error fetching data: ${error}`);

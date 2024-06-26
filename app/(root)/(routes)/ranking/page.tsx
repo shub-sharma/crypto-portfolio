@@ -2,7 +2,6 @@
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { Header } from "@/components/header";
-import GenericCard from "@/components/generic-card";
 
 import { DataTable } from "@/components/leaderboard-table/data-table";
 import { columns } from "@/components/leaderboard-table/columns";
@@ -17,8 +16,15 @@ const Leaderboard = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const headerColumnMapping = {
+    one_hour_change_percentage: "1h %",
+    one_day_change_percentage: "1d %",
+    seven_day_change_percentage: "7d %",
+    one_year_change_percentage: "1y %",
+    total_holdings_value: "holding",
+  };
+
   const userRedirect = (rowData: any) => {
-    setTimeout(() => {}, 2000);
     router.push(`/profile/${rowData.id}`);
   };
 
@@ -47,7 +53,18 @@ const Leaderboard = () => {
           leaderboardJsonResponse.allInvestors
         );
 
-        setLeaderboardTableData(tableData);
+        const modifiedArray = tableData.map((item) => {
+          const modifiedItem = {};
+          for (const key in item) {
+            if (item.hasOwnProperty(key)) {
+              const newKey = headerColumnMapping[key] || key;
+              modifiedItem[newKey] = item[key];
+            }
+          }
+          return modifiedItem;
+        });
+
+        setLeaderboardTableData(modifiedArray);
       } catch (error) {
         setErrorMessage(`Error fetching data: ${error}`);
       } finally {

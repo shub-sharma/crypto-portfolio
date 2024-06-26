@@ -17,7 +17,7 @@ import {
 
 export type Holding = {
   id: string;
-  price_usd: number;
+  price: number;
   symbol: string;
   image: string;
   name: string;
@@ -67,7 +67,7 @@ export const columns: ColumnDef<Holding>[] = [
     },
   },
   {
-    accessorKey: "price_usd",
+    accessorKey: "Price",
     header: ({ column }) => {
       return (
         <div className="flex justify-end">
@@ -82,11 +82,9 @@ export const columns: ColumnDef<Holding>[] = [
       );
     },
     cell: ({ row }) => {
-      const costBasis = parseFloat(row.getValue("price_usd"));
+      const price = parseFloat(row.getValue("Price"));
       return (
-        <div className="text-right text-base mr-4">
-          {formatDollar(costBasis)}
-        </div>
+        <div className="text-right text-base mr-4">{formatDollar(price)}</div>
       );
     },
   },
@@ -112,7 +110,7 @@ export const columns: ColumnDef<Holding>[] = [
     },
   },
   {
-    accessorKey: "amount_in_usd",
+    accessorKey: "Holding",
     header: ({ column }) => {
       return (
         <div className="flex justify-end">
@@ -127,7 +125,7 @@ export const columns: ColumnDef<Holding>[] = [
       );
     },
     cell: ({ row }) => {
-      const total = parseFloat(row.getValue("amount_in_usd"));
+      const total = parseFloat(row.getValue("Holding"));
       return (
         <div className="text-right text-base mr-4">
           {formatDollar(total, 2)}
@@ -136,7 +134,7 @@ export const columns: ColumnDef<Holding>[] = [
     },
   },
   {
-    accessorKey: "costBasis",
+    accessorKey: "Total Cost",
     header: ({ column }) => {
       return (
         <div className="flex justify-end">
@@ -151,7 +149,7 @@ export const columns: ColumnDef<Holding>[] = [
       );
     },
     cell: ({ row }) => {
-      const costBasis = parseFloat(row.getValue("costBasis"));
+      const costBasis = parseFloat(row.getValue("Total Cost"));
       return (
         <div className="text-right text-base mr-4">
           {formatDollar(costBasis)}
@@ -161,7 +159,7 @@ export const columns: ColumnDef<Holding>[] = [
   },
 
   {
-    accessorKey: "net_profit",
+    accessorKey: "Net Profit",
     header: ({ column }) => {
       return (
         <div className="flex justify-end">
@@ -176,7 +174,7 @@ export const columns: ColumnDef<Holding>[] = [
       );
     },
     cell: ({ row }) => {
-      const net = parseFloat(row.getValue("net_profit"));
+      const net = parseFloat(row.getValue("Net Profit"));
 
       return (
         <div
@@ -191,9 +189,8 @@ export const columns: ColumnDef<Holding>[] = [
       );
     },
   },
-
   {
-    accessorKey: "usd_24h_percent_change",
+    accessorKey: "1h %",
     header: ({ column }) => {
       return (
         <div className="flex justify-end">
@@ -201,16 +198,14 @@ export const columns: ColumnDef<Holding>[] = [
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            <div className="text-base">24h %</div>
+            <div className="text-base">1h %</div>
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
       );
     },
     cell: ({ row }) => {
-      const percent = parseFloat(
-        row.getValue("usd_24h_percent_change")
-      ).toFixed(2);
+      const percent = parseFloat(row.getValue("1h %")).toFixed(2);
       return (
         <div
           className={
@@ -225,7 +220,37 @@ export const columns: ColumnDef<Holding>[] = [
     },
   },
   {
-    accessorKey: "usd_7d_percent_change",
+    accessorKey: "24h %",
+    header: ({ column }) => {
+      return (
+        <div className="flex justify-end">
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <div className="text-base">24h %</div>
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
+    cell: ({ row }) => {
+      const percent = parseFloat(row.getValue("24h %")).toFixed(2);
+      return (
+        <div
+          className={
+            percent < 0
+              ? "text-right text-base text-red-600 mr-4"
+              : "text-right text-base text-green-600 mr-4"
+          }
+        >
+          {percent}%
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "7d %",
     header: ({ column }) => {
       return (
         <div className="flex justify-end">
@@ -240,9 +265,7 @@ export const columns: ColumnDef<Holding>[] = [
       );
     },
     cell: ({ row }) => {
-      const percent = parseFloat(row.getValue("usd_7d_percent_change")).toFixed(
-        2
-      );
+      const percent = parseFloat(row.getValue("7d %")).toFixed(2);
       return (
         <div
           className={

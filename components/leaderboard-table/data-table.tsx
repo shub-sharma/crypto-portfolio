@@ -16,7 +16,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { User } from "lucide-react";
+import { ChevronDown, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -175,7 +175,7 @@ export function DataTable<TData, TValue>({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
-                Columns
+                Columns <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
